@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Managing Committee (SMC) | Saraswati Shishu Vidya Mandir</title>
+  <meta name="description" content="Official School Managing Committee (SMC) constitution of Saraswati Shishu Vidya Mandir as mandated by CBSE Affiliation Bye-Laws.">
+  <meta name="keywords" content="School Managing Committee, SMC Members, CBSE Affiliation Bye-Laws, Saraswati Shishu Vidya Mandir, School Governance">
+  
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg">
+</head>
+<body>
+
+  <!-- Top Accessibility & Info Bar -->
+  <aside class="top-bar">
+    <div class="container">
+      <div class="top-bar-left">
+        <span class="cbse-affil-badge">CBSE AFFILIATED | CLASSES 1–10</span>
+        <div class="top-info-item">
+          <span>📍</span>
+          <span>[OFFICIAL SCHOOL ADDRESS], [PIN CODE]</span>
+        </div>
+        <div class="top-info-item">
+          <span>📞</span>
+          <span>[OFFICIAL PHONE NUMBER]</span>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="accessibility-controls">
+          <span style="font-size: 0.75rem; color: #94a3b8; margin-right: 0.25rem;">Font:</span>
+          <button class="font-btn" id="font-dec" title="Decrease Font Size">A-</button>
+          <button class="font-btn" id="font-reset" title="Reset Font Size">A</button>
+          <button class="font-btn" id="font-inc" title="Increase Font Size">A+</button>
+        </div>
+        <button class="admin-link-btn" data-open-search title="Search Website (Ctrl+K)">
+          <span>🔍</span> Search
+        </button>
+        <a href="admin.html" class="admin-link-btn" title="School Administration Portal">
+          <span>⚙️</span> Admin Portal
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Header Branding -->
+  <header class="main-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="brand-wrapper">
+          <img src="assets/images/logo.jpg" alt="Saraswati Shishu Vidya Mandir Crest" class="brand-logo">
+          <div class="brand-text">
+            <h1 class="school-title">Saraswati Shishu Vidya Mandir</h1>
+            <span class="school-subtitle">Affiliated to Central Board of Secondary Education (CBSE)</span>
+            <span class="school-motto-tag">सा विद्या या विमुक्तये • Classes 1 to 10</span>
+          </div>
+        </a>
+
+        <div class="header-actions">
+          <a href="mandatory-public-disclosure.html" class="btn-mandatory-disclosure">
+            <span class="disclosure-icon">📋</span>
+            <span>MANDATORY PUBLIC DISCLOSURE</span>
+          </a>
+
+          <button class="mobile-nav-toggle" id="mobile-menu-toggle" aria-label="Open Navigation Menu">
+            ☰
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Primary Navigation Bar -->
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="container">
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">HOME</a></li>
+        <li class="nav-item"><a href="about-school.html" class="nav-link">ABOUT SCHOOL</a></li>
+        <li class="nav-item"><a href="academics.html" class="nav-link">ACADEMICS</a></li>
+        <li class="nav-item"><a href="admissions.html" class="nav-link">ADMISSIONS</a></li>
+        <li class="nav-item"><a href="faculty-staff.html" class="nav-link">FACULTY & STAFF</a></li>
+        <li class="nav-item"><a href="infrastructure.html" class="nav-link">INFRASTRUCTURE</a></li>
+        <li class="nav-item"><a href="fee-structure.html" class="nav-link">FEES</a></li>
+        <li class="nav-item"><a href="academic-calendar.html" class="nav-link">ACADEMIC CALENDAR</a></li>
+        <li class="nav-item"><a href="transfer-certificates.html" class="nav-link">TC VERIFICATION</a></li>
+        <li class="nav-item active"><a href="school-management.html" class="nav-link">MANAGEMENT (SMC)</a></li>
+        <li class="nav-item"><a href="notices.html" class="nav-link">NOTICES</a></li>
+        <li class="nav-item"><a href="results-achievements.html" class="nav-link">RESULTS</a></li>
+        <li class="nav-item"><a href="gallery.html" class="nav-link">GALLERY</a></li>
+        <li class="nav-item"><a href="downloads.html" class="nav-link">DOWNLOADS</a></li>
+        <li class="nav-item"><a href="mandatory-public-disclosure.html" class="nav-link highlight-link">MANDATORY PUBLIC DISCLOSURE</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">CONTACT</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer">
+    <div class="drawer-header">
+      <h3 class="drawer-title">Menu Navigation</h3>
+      <button class="drawer-close-btn" id="drawer-close">&times;</button>
+    </div>
+    <ul class="drawer-menu">
+      <li><a href="index.html" class="drawer-link">Home</a></li>
+      <li><a href="mandatory-public-disclosure.html" class="drawer-link drawer-highlight">📋 Mandatory Public Disclosure</a></li>
+      <li><a href="about-school.html" class="drawer-link">About School</a></li>
+      <li><a href="academics.html" class="drawer-link">Academics (Classes 1–10)</a></li>
+      <li><a href="admissions.html" class="drawer-link">Admissions 2026–27</a></li>
+      <li><a href="faculty-staff.html" class="drawer-link">Faculty & Staff</a></li>
+      <li><a href="infrastructure.html" class="drawer-link">Infrastructure</a></li>
+      <li><a href="fee-structure.html" class="drawer-link">Fee Structure</a></li>
+      <li><a href="academic-calendar.html" class="drawer-link">Academic Calendar</a></li>
+      <li><a href="transfer-certificates.html" class="drawer-link">Transfer Certificates</a></li>
+      <li><a href="school-management.html" class="drawer-link active">School Management (SMC)</a></li>
+      <li><a href="notices.html" class="drawer-link">Notices & Circulars</a></li>
+      <li><a href="results-achievements.html" class="drawer-link">Results & Achievements</a></li>
+      <li><a href="gallery.html" class="drawer-link">Photo Gallery</a></li>
+      <li><a href="downloads.html" class="drawer-link">Downloads Center</a></li>
+      <li><a href="contact.html" class="drawer-link">Contact Information</a></li>
+      <li><a href="admin.html" class="drawer-link" style="color: var(--accent-dark);">⚙️ Admin Management Portal</a></li>
+    </ul>
+  </aside>
+
+  <!-- Page Banner -->
+  <section class="page-banner">
+    <div class="container">
+      <div class="page-banner-inner">
+        <div>
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <span>School Management</span>
+          </nav>
+          <h1 class="page-banner-title">School Managing Committee (SMC)</h1>
+          <p class="page-banner-desc">
+            Constitution and composition of the School Managing Committee constituted under Chapter VIII of the CBSE Affiliation Bye-Laws.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="section">
+    <div class="container">
+
+      <!-- CBSE Regulatory Context -->
+      <div class="safety-alert-box">
+        <strong>CBSE Governance Norms:</strong> The School Managing Committee is constituted in accordance with CBSE Affiliation Bye-Laws to oversee academic standards, staff welfare, infrastructural adequacy, financial accountability, and student well-being.
+      </div>
+
+      <!-- SMC Members Table -->
+      <div class="table-responsive" style="margin-bottom: 3.5rem;">
+        <table class="official-table">
+          <thead>
+            <tr>
+              <th style="width: 50px;">SL.</th>
+              <th>MEMBER NAME</th>
+              <th>DESIGNATION IN SMC</th>
+              <th>REPRESENTATION / CATEGORY</th>
+              <th>TENURE / STATUS</th>
+            </tr>
+          </thead>
+          <tbody id="smc-tbody">
+            <tr>
+              <td><strong>1</strong></td>
+              <td><span class="badge badge-official-placeholder">[MEMBER NAME]</span></td>
+              <td><strong style="color: var(--primary);">President / Chairman</strong></td>
+              <td>Trust / Society Nominee (Eminent Citizen)</td>
+              <td>3 Years</td>
+            </tr>
+            <tr>
+              <td><strong>2</strong></td>
+              <td><strong style="color: var(--primary);" id="smc-principal-name">[PRINCIPAL NAME]</strong></td>
+              <td><strong style="color: var(--accent-dark);">Member Secretary</strong></td>
+              <td>Principal, Saraswati Shishu Vidya Mandir</td>
+              <td>Ex-Officio</td>
+            </tr>
+            <tr>
+              <td><strong>3</strong></td>
+              <td><span class="badge badge-official-placeholder">[MEMBER NAME]</span></td>
+              <td>Member (Parent Representative)</td>
+              <td>Parent of Student (Class 8)</td>
+              <td>3 Years</td>
+            </tr>
+            <tr>
+              <td><strong>4</strong></td>
+              <td><span class="badge badge-official-placeholder">[MEMBER NAME]</span></td>
+              <td>Member (Parent Representative)</td>
+              <td>Parent of Student (Class 5)</td>
+              <td>3 Years</td>
+            </tr>
+            <tr>
+              <td><strong>5</strong></td>
+              <td><span class="badge badge-official-placeholder">[TEACHER NAME]</span></td>
+              <td>Member (Teacher Representative)</td>
+              <td>Senior Teacher, Secondary Wing</td>
+              <td>3 Years</td>
+            </tr>
+            <tr>
+              <td><strong>6</strong></td>
+              <td><span class="badge badge-official-placeholder">[TEACHER NAME]</span></td>
+              <td>Member (Teacher Representative)</td>
+              <td>Teacher, Primary Wing</td>
+              <td>3 Years</td>
+            </tr>
+            <tr>
+              <td><strong>7</strong></td>
+              <td><span class="badge badge-official-placeholder">[MEMBER NAME]</span></td>
+              <td>Member (Female Educationist)</td>
+              <td>Nominated Educationist / Scholar</td>
+              <td>3 Years</td>
+            </tr>
+            <tr>
+              <td><strong>8</strong></td>
+              <td><span class="badge badge-official-placeholder">[MEMBER NAME]</span></td>
+              <td>Member (CBSE Board Nominee)</td>
+              <td>Principal, Nearby Kendriya Vidyalaya / Affiliated School</td>
+              <td>As per CBSE</td>
+            </tr>
+            <tr>
+              <td><strong>9</strong></td>
+              <td><span class="badge badge-official-placeholder">[MEMBER NAME]</span></td>
+              <td>Member (State Education Dept. Rep)</td>
+              <td>Nominee of District Education Office</td>
+              <td>As per Govt. Order</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Functions & Powers of SMC -->
+      <section>
+        <div class="section-header">
+          <span class="section-tag">Key Responsibilities</span>
+          <h2 class="section-title">Functions of the School Managing Committee</h2>
+          <p class="section-subtitle">
+            Statutory responsibilities defined under CBSE Affiliation Bye-Laws.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon-box">📋</div>
+            <h3 class="card-title">Academic Governance</h3>
+            <p class="card-text">Ensuring curriculum implementation adheres strictly to CBSE / NCERT guidelines and monitoring annual academic performance.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon-box">🛡️</div>
+            <h3 class="card-title">Campus Safety & Child Protection</h3>
+            <p class="card-text">Supervising building safety, fire preparedness, clean drinking water, sanitation certificates, and child protection policies.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon-box">👥</div>
+            <h3 class="card-title">Staff Welfare & Appointments</h3>
+            <p class="card-text">Overseeing that all teachers possess prescribed CBSE qualifications, service conditions, and continuous professional development.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Global Search Modal -->
+  <div class="modal-overlay" id="global-search-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Search School Portal</h3>
+        <button class="modal-close-btn" id="close-global-search">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <input type="text" id="global-search-input" class="form-control" placeholder="Search school management, committee members..." autofocus>
+        </div>
+        <div id="global-search-results"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Official Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+            <img src="assets/images/logo.jpg" alt="Saraswati Shishu Vidya Mandir Logo" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--accent);">
+            <h3 class="footer-brand-title">Saraswati Shishu Vidya Mandir</h3>
+          </div>
+          <p class="footer-desc">
+            A premier CBSE-affiliated co-educational institution delivering foundational and secondary education (Classes 1–10) in alignment with Indian cultural values and CBSE educational standards.
+          </p>
+          <div class="footer-disclosure-callout">
+            <p><strong>CBSE Compliance:</strong> Mandatory Public Disclosure is maintained under Appendix IX of CBSE Affiliation Bye-Laws.</p>
+            <a href="mandatory-public-disclosure.html" class="btn btn-accent btn-sm" style="width: 100%;">
+              <span>📋</span> Mandatory Public Disclosure
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="about-school.html">➔ About School</a></li>
+            <li><a href="academics.html">➔ Academics (Classes 1–10)</a></li>
+            <li><a href="admissions.html">➔ Admissions Process</a></li>
+            <li><a href="faculty-staff.html">➔ Faculty & Staff</a></li>
+            <li><a href="infrastructure.html">➔ Infrastructure & Labs</a></li>
+            <li><a href="fee-structure.html">➔ Fee Structure</a></li>
+            <li><a href="academic-calendar.html">➔ Academic Calendar</a></li>
+            <li><a href="mandatory-public-disclosure.html" style="color: #fbbf24; font-weight: 700;">➔ Mandatory Public Disclosure</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Official Portal</h4>
+          <ul class="footer-links">
+            <li><a href="notices.html">➔ Notices & Circulars</a></li>
+            <li><a href="downloads.html">➔ Downloads & Proformas</a></li>
+            <li><a href="transfer-certificates.html">➔ Transfer Certificates (TC)</a></li>
+            <li><a href="school-management.html">➔ School Management (SMC)</a></li>
+            <li><a href="results-achievements.html">➔ Results & Achievements</a></li>
+            <li><a href="gallery.html">➔ Photo Gallery</a></li>
+            <li><a href="contact.html">➔ Contact & Grievance Desk</a></li>
+            <li><a href="admin.html">➔ School Admin Login</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Contact Information</h4>
+          <ul class="footer-contact-list">
+            <li class="footer-contact-item">
+              <span>📍</span>
+              <span><strong>Address:</strong> [OFFICIAL SCHOOL ADDRESS], [PIN CODE]</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>📞</span>
+              <span><strong>Phone:</strong> [OFFICIAL PHONE NUMBER]</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>✉️</span>
+              <span><strong>Email:</strong> [OFFICIAL SCHOOL EMAIL]</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>🕒</span>
+              <span><strong>Office Hours:</strong> Mon – Sat: 8:00 AM – 3:30 PM</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>🏛️</span>
+              <span><strong>Affiliation No:</strong> [OFFICIAL CBSE AFFILIATION NUMBER]</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>🏷️</span>
+              <span><strong>School Code:</strong> [OFFICIAL SCHOOL CODE]</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          © 2026 Saraswati Shishu Vidya Mandir. All Rights Reserved. | Affiliated to CBSE, New Delhi (Classes 1–10).
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <a href="mandatory-public-disclosure.html" style="color: #fde68a;">Mandatory Disclosure</a>
+          <a href="downloads.html" style="color: #cbd5e1;">School Policies</a>
+          <a href="contact.html" style="color: #cbd5e1;">Contact Us</a>
+        </div>
+        <p class="footer-disclaimer-note">
+          <strong>CBSE Compliance Disclaimer:</strong> All official data, certificates, and affiliations are maintained and verified directly by the school administration. In accordance with CBSE guidelines, placeholders are displayed until verified by Saraswati Shishu Vidya Mandir.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    function updateSMCPrincipal() {
+      const data = SchoolData.get();
+      if (data.generalInfo) {
+        const pEl = document.getElementById("smc-principal-name");
+        if (pEl) pEl.textContent = data.generalInfo.principalName;
+      }
+
+      const tbody = document.getElementById("smc-tbody");
+      if (tbody && data.smcMembers && Array.isArray(data.smcMembers)) {
+        tbody.innerHTML = data.smcMembers.map((m, idx) => `
+          <tr>
+            <td><strong>${idx + 1}</strong></td>
+            <td><strong style="color: var(--primary);">${m.name}</strong></td>
+            <td><span class="badge badge-cbse">${m.designation}</span></td>
+            <td>${m.representation}</td>
+            <td>${m.designation.includes('Principal') || m.designation.includes('Secretary') ? 'Ex-Officio' : '3 Years'}</td>
+          </tr>
+        `).join("");
+      }
+    }
+    document.addEventListener("DOMContentLoaded", updateSMCPrincipal);
+    window.addEventListener("schoolDataUpdated", updateSMCPrincipal);
+  </script>
+</body>
+</html>

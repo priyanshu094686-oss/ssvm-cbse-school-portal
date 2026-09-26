@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academics & Curriculum (Classes 1–10) | Saraswati Shishu Vidya Mandir</title>
+  <meta name="description" content="Academic wings, CBSE/NCERT curriculum, subjects, evaluation scheme, and teaching methodology for Classes 1 to 10 at Saraswati Shishu Vidya Mandir.">
+  <meta name="keywords" content="Academics, CBSE Curriculum, Classes 1 to 10, NCERT Books, Examination Scheme, Saraswati Shishu Vidya Mandir, Primary Wing, Middle Wing, Secondary Wing">
+  
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg">
+</head>
+<body>
+
+  <!-- Top Accessibility & Info Bar -->
+  <aside class="top-bar">
+    <div class="container">
+      <div class="top-bar-left">
+        <span class="cbse-affil-badge">CBSE AFFILIATED | CLASSES 1–10</span>
+        <div class="top-info-item">
+          <span>📍</span>
+          <span>[OFFICIAL SCHOOL ADDRESS], [PIN CODE]</span>
+        </div>
+        <div class="top-info-item">
+          <span>📞</span>
+          <span>[OFFICIAL PHONE NUMBER]</span>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="accessibility-controls">
+          <span style="font-size: 0.75rem; color: #94a3b8; margin-right: 0.25rem;">Font:</span>
+          <button class="font-btn" id="font-dec" title="Decrease Font Size">A-</button>
+          <button class="font-btn" id="font-reset" title="Reset Font Size">A</button>
+          <button class="font-btn" id="font-inc" title="Increase Font Size">A+</button>
+        </div>
+        <button class="admin-link-btn" data-open-search title="Search Website (Ctrl+K)">
+          <span>🔍</span> Search
+        </button>
+        <a href="admin.html" class="admin-link-btn" title="School Administration Portal">
+          <span>⚙️</span> Admin Portal
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Header Branding -->
+  <header class="main-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="brand-wrapper">
+          <img src="assets/images/logo.jpg" alt="Saraswati Shishu Vidya Mandir Crest" class="brand-logo">
+          <div class="brand-text">
+            <h1 class="school-title">Saraswati Shishu Vidya Mandir</h1>
+            <span class="school-subtitle">Affiliated to Central Board of Secondary Education (CBSE)</span>
+            <span class="school-motto-tag">सा विद्या या विमुक्तये • Classes 1 to 10</span>
+          </div>
+        </a>
+
+        <div class="header-actions">
+          <a href="mandatory-public-disclosure.html" class="btn-mandatory-disclosure">
+            <span class="disclosure-icon">📋</span>
+            <span>MANDATORY PUBLIC DISCLOSURE</span>
+          </a>
+
+          <button class="mobile-nav-toggle" id="mobile-menu-toggle" aria-label="Open Navigation Menu">
+            ☰
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Primary Navigation Bar -->
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="container">
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">HOME</a></li>
+        <li class="nav-item"><a href="about-school.html" class="nav-link">ABOUT SCHOOL</a></li>
+        <li class="nav-item active"><a href="academics.html" class="nav-link">ACADEMICS</a></li>
+        <li class="nav-item"><a href="admissions.html" class="nav-link">ADMISSIONS</a></li>
+        <li class="nav-item"><a href="faculty-staff.html" class="nav-link">FACULTY & STAFF</a></li>
+        <li class="nav-item"><a href="infrastructure.html" class="nav-link">INFRASTRUCTURE</a></li>
+        <li class="nav-item"><a href="fee-structure.html" class="nav-link">FEES</a></li>
+        <li class="nav-item"><a href="academic-calendar.html" class="nav-link">ACADEMIC CALENDAR</a></li>
+        <li class="nav-item"><a href="transfer-certificates.html" class="nav-link">TC VERIFICATION</a></li>
+        <li class="nav-item"><a href="school-management.html" class="nav-link">MANAGEMENT (SMC)</a></li>
+        <li class="nav-item"><a href="notices.html" class="nav-link">NOTICES</a></li>
+        <li class="nav-item"><a href="results-achievements.html" class="nav-link">RESULTS</a></li>
+        <li class="nav-item"><a href="gallery.html" class="nav-link">GALLERY</a></li>
+        <li class="nav-item"><a href="downloads.html" class="nav-link">DOWNLOADS</a></li>
+        <li class="nav-item"><a href="mandatory-public-disclosure.html" class="nav-link highlight-link">MANDATORY PUBLIC DISCLOSURE</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">CONTACT</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer">
+    <div class="drawer-header">
+      <h3 class="drawer-title">Menu Navigation</h3>
+      <button class="drawer-close-btn" id="drawer-close">&times;</button>
+    </div>
+    <ul class="drawer-menu">
+      <li><a href="index.html" class="drawer-link">Home</a></li>
+      <li><a href="mandatory-public-disclosure.html" class="drawer-link drawer-highlight">📋 Mandatory Public Disclosure</a></li>
+      <li><a href="about-school.html" class="drawer-link">About School</a></li>
+      <li><a href="academics.html" class="drawer-link active">Academics (Classes 1–10)</a></li>
+      <li><a href="admissions.html" class="drawer-link">Admissions 2026–27</a></li>
+      <li><a href="faculty-staff.html" class="drawer-link">Faculty & Staff</a></li>
+      <li><a href="infrastructure.html" class="drawer-link">Infrastructure</a></li>
+      <li><a href="fee-structure.html" class="drawer-link">Fee Structure</a></li>
+      <li><a href="academic-calendar.html" class="drawer-link">Academic Calendar</a></li>
+      <li><a href="transfer-certificates.html" class="drawer-link">Transfer Certificates</a></li>
+      <li><a href="school-management.html" class="drawer-link">School Management (SMC)</a></li>
+      <li><a href="notices.html" class="drawer-link">Notices & Circulars</a></li>
+      <li><a href="results-achievements.html" class="drawer-link">Results & Achievements</a></li>
+      <li><a href="gallery.html" class="drawer-link">Photo Gallery</a></li>
+      <li><a href="downloads.html" class="drawer-link">Downloads Center</a></li>
+      <li><a href="contact.html" class="drawer-link">Contact Information</a></li>
+      <li><a href="admin.html" class="drawer-link" style="color: var(--accent-dark);">⚙️ Admin Management Portal</a></li>
+    </ul>
+  </aside>
+
+  <!-- Page Banner -->
+  <section class="page-banner">
+    <div class="container">
+      <div class="page-banner-inner">
+        <div>
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <span>Academics</span>
+          </nav>
+          <h1 class="page-banner-title">Academics & Curriculum (Classes 1–10)</h1>
+          <p class="page-banner-desc">
+            CBSE-aligned curriculum framework, NCERT syllabus implementation, subject combinations, evaluation systems, and teaching methodology.
+          </p>
+        </div>
+        <div>
+          <a href="downloads.html" class="btn btn-outline-white btn-sm">
+            <span>📚</span> Download Syllabus & Booklist
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="section">
+    <div class="container">
+
+      <!-- Academic Wings Structure -->
+      <section style="margin-bottom: 4rem;">
+        <div class="section-header">
+          <span class="section-tag">Educational Structure</span>
+          <h2 class="section-title">Academic Wings & Progression</h2>
+          <p class="section-subtitle">
+            Providing tailored educational methods for each developmental stage of childhood and early adolescence.
+          </p>
+        </div>
+
+        <!-- 1. Primary Wing -->
+        <div class="card" id="primary" style="margin-bottom: 2rem; border-left: 5px solid var(--accent);">
+          <div class="grid-2" style="align-items: center;">
+            <div>
+              <span class="badge badge-pending" style="margin-bottom: 0.5rem;">Classes 1 to 5</span>
+              <h3 style="color: var(--primary); font-size: 1.5rem; margin-bottom: 0.75rem;">Primary Wing (Foundational & Preparatory)</h3>
+              <p class="card-text">
+                Focus on building core language competence (Hindi, English, Sanskrit), basic numeracy, environmental appreciation, art, music, physical fitness, and moral stories.
+              </p>
+              <div style="margin-top: 1rem;">
+                <strong>Core Subjects:</strong>
+                <ul style="margin: 0.5rem 0 0 1.25rem; font-size: 0.9rem; color: var(--text-muted);">
+                  <li>Hindi, English Language & Grammar</li>
+                  <li>Mathematics & Mental Arithmetic</li>
+                  <li>Environmental Studies (EVS) / General Science</li>
+                  <li>Sanskrit (Introductory)</li>
+                  <li>Moral Education (Naitik Shiksha) & Cultural Knowledge</li>
+                  <li>Yoga, Physical Training (Sharirik), Art & Craft</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div style="background: var(--bg-alt); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                <h4 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem;">Pedagogical Approach</h4>
+                <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6;">
+                  Playful, activity-oriented learning with minimum rote memorization. Regular classroom evaluations without high-stakes examination pressure.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Middle Wing -->
+        <div class="card" id="middle" style="margin-bottom: 2rem; border-left: 5px solid var(--primary);">
+          <div class="grid-2" style="align-items: center;">
+            <div>
+              <span class="badge badge-cbse" style="margin-bottom: 0.5rem;">Classes 6 to 8</span>
+              <h3 style="color: var(--primary); font-size: 1.5rem; margin-bottom: 0.75rem;">Middle Wing (Upper Primary)</h3>
+              <p class="card-text">
+                Deepening scientific and analytical capabilities. Systematic introduction to discrete disciplines: Physics, Chemistry, Biology, History, Geography, Civics, and Computer Science.
+              </p>
+              <div style="margin-top: 1rem;">
+                <strong>Core Subjects:</strong>
+                <ul style="margin: 0.5rem 0 0 1.25rem; font-size: 0.9rem; color: var(--text-muted);">
+                  <li>Language 1: Hindi (Course A/B)</li>
+                  <li>Language 2: English Language & Literature</li>
+                  <li>Language 3: Sanskrit</li>
+                  <li>Mathematics</li>
+                  <li>Science (Integrated Physics, Chemistry, Biology)</li>
+                  <li>Social Science (History, Geography, Political Science)</li>
+                  <li>Computer Studies / IT Literacy</li>
+                  <li>Work Experience, Health & Physical Education, Yoga</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div style="background: var(--bg-alt); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                <h4 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem;">Pedagogical Approach</h4>
+                <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6;">
+                  Inquiry-based learning, practical laboratory sessions, group discussions, and project presentations in accordance with NCERT guidelines.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Secondary Wing -->
+        <div class="card" id="secondary" style="margin-bottom: 2rem; border-left: 5px solid var(--accent-dark);">
+          <div class="grid-2" style="align-items: center;">
+            <div>
+              <span class="badge badge-pending" style="margin-bottom: 0.5rem;">Classes 9 & 10</span>
+              <h3 style="color: var(--primary); font-size: 1.5rem; margin-bottom: 0.75rem;">Secondary Wing (CBSE AISSE Preparation)</h3>
+              <p class="card-text">
+                Rigorous preparation for the <strong>CBSE All India Secondary School Examination (AISSE)</strong>. Focus on NCERT syllabus mastery, internal assessment portfolios, lab practicals, and conceptual clarity.
+              </p>
+              <div style="margin-top: 1rem;">
+                <strong>CBSE Board Prescribed Subjects:</strong>
+                <ul style="margin: 0.5rem 0 0 1.25rem; font-size: 0.9rem; color: var(--text-muted);">
+                  <li>Language 1: English Language & Literature (Code 184)</li>
+                  <li>Language 2: Hindi Course-A (Code 002) / Sanskrit (Code 122)</li>
+                  <li>Mathematics: Standard (Code 041) / Basic (Code 241)</li>
+                  <li>Science with Practical Work (Code 086)</li>
+                  <li>Social Science (Code 087)</li>
+                  <li>Co-Scholastic: Health & Physical Education, Art Education, SEWA</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div style="background: var(--bg-alt); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                <h4 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem;">Board Evaluation Blueprint</h4>
+                <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6;">
+                  <strong>Board Theory Exam:</strong> 80 Marks<br>
+                  <strong>Internal Assessment:</strong> 20 Marks (Periodic Tests 5M, Multiple Assessment 5M, Portfolio 5M, Subject Enrichment/Lab 5M).
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Teaching Methodology: Panchmukhi Shiksha -->
+      <section style="margin-bottom: 4rem;">
+        <div class="section-header">
+          <span class="section-tag">Methodology</span>
+          <h2 class="section-title">Teaching Methodology (Panchmukhi Shiksha)</h2>
+          <p class="section-subtitle">
+            An integrated educational approach combining five key dimensions of child growth.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon-box">🏃</div>
+            <h3 class="card-title">1. Sharirik (Physical)</h3>
+            <p class="card-text">Physical fitness, athletics, yoga asanas, and drill practice for building bodily stamina, endurance, and agility.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon-box">🧘</div>
+            <h3 class="card-title">2. Yogic (Mental Balance)</h3>
+            <p class="card-text">Pranayama, meditation, and concentration exercises to sharpen mental focus and emotional equilibrium.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon-box">🪔</div>
+            <h3 class="card-title">3. Naitik (Moral & Ethical)</h3>
+            <p class="card-text">Stories of national heroes, value introspection, honesty, duty, respect for elders, and community responsibility.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon-box">🎶</div>
+            <h3 class="card-title">4. Sangit (Aesthetic & Cultural)</h3>
+            <p class="card-text">Vocal and instrumental patriotic songs, devotional singing, and cultural arts fostering harmony and cultural identity.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon-box">📜</div>
+            <h3 class="card-title">5. Sanskrit (Linguistic Heritage)</h3>
+            <p class="card-text">Recitation of inspiring shlokas and foundational Sanskrit grammar, enhancing language intellect and cultural rootedness.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon-box">💻</div>
+            <h3 class="card-title">Modern Scientific Integration</h3>
+            <p class="card-text">Seamless integration of modern ICT tools, smart classroom presentations, and laboratory practicals with timeless values.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Examination & Assessment Scheme -->
+      <section>
+        <div class="section-header">
+          <span class="section-tag">Evaluation Framework</span>
+          <h2 class="section-title">Examination & Assessment Scheme</h2>
+          <p class="section-subtitle">
+            Structured annual testing system adhering to CBSE Uniform Assessment guidelines.
+          </p>
+        </div>
+
+        <div class="table-responsive">
+          <table class="official-table">
+            <thead>
+              <tr>
+                <th>EVALUATION COMPONENT</th>
+                <th>APPLICABILITY</th>
+                <th>WEIGHTAGE</th>
+                <th>PURPOSE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Periodic Assessment 1 (PA-1)</strong></td>
+                <td>Classes 1 to 10</td>
+                <td>Weightage as per CBSE</td>
+                <td>Diagnostic testing of early term concepts</td>
+              </tr>
+              <tr>
+                <td><strong>Mid-Term / Half-Yearly Exam</strong></td>
+                <td>Classes 1 to 10</td>
+                <td>Formal Term Assessment</td>
+                <td>Comprehensive evaluation of Term-1 syllabus</td>
+              </tr>
+              <tr>
+                <td><strong>Periodic Assessment 2 (PA-2)</strong></td>
+                <td>Classes 1 to 10</td>
+                <td>Weightage as per CBSE</td>
+                <td>Testing post-mid-term competencies</td>
+              </tr>
+              <tr>
+                <td><strong>Pre-Board Examinations</strong></td>
+                <td>Class 10 (AISSE Candidates)</td>
+                <td>Simulation Exams</td>
+                <td>Full-syllabus board examination practice</td>
+              </tr>
+              <tr>
+                <td><strong>Annual Examination</strong></td>
+                <td>Classes 1 to 9</td>
+                <td>Summative Assessment</td>
+                <td>Promotion evaluation as per CBSE pass criteria</td>
+              </tr>
+              <tr>
+                <td><strong>CBSE AISSE Board Exam</strong></td>
+                <td>Class 10</td>
+                <td>80% Board + 20% Internal</td>
+                <td>Official CBSE National Secondary Certification</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+          <a href="academic-calendar.html" class="btn btn-primary" style="margin-right: 0.75rem;">
+            <span>📅</span> View Academic Calendar ➔
+          </a>
+          <a href="results-achievements.html" class="btn btn-outline">
+            <span>🏆</span> View Results & Achievements ➔
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Global Search Modal -->
+  <div class="modal-overlay" id="global-search-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Search School Portal</h3>
+        <button class="modal-close-btn" id="close-global-search">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <input type="text" id="global-search-input" class="form-control" placeholder="Search academics, curriculum, subjects..." autofocus>
+        </div>
+        <div id="global-search-results"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Official Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+            <img src="assets/images/logo.jpg" alt="Saraswati Shishu Vidya Mandir Logo" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--accent);">
+            <h3 class="footer-brand-title">Saraswati Shishu Vidya Mandir</h3>
+          </div>
+          <p class="footer-desc">
+            A premier CBSE-affiliated co-educational institution delivering foundational and secondary education (Classes 1–10) in alignment with Indian cultural values and CBSE educational standards.
+          </p>
+          <div class="footer-disclosure-callout">
+            <p><strong>CBSE Compliance:</strong> Mandatory Public Disclosure is maintained under Appendix IX of CBSE Affiliation Bye-Laws.</p>
+            <a href="mandatory-public-disclosure.html" class="btn btn-accent btn-sm" style="width: 100%;">
+              <span>📋</span> Mandatory Public Disclosure
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="about-school.html">➔ About School</a></li>
+            <li><a href="academics.html">➔ Academics (Classes 1–10)</a></li>
+            <li><a href="admissions.html">➔ Admissions Process</a></li>
+            <li><a href="faculty-staff.html">➔ Faculty & Staff</a></li>
+            <li><a href="infrastructure.html">➔ Infrastructure & Labs</a></li>
+            <li><a href="fee-structure.html">➔ Fee Structure</a></li>
+            <li><a href="academic-calendar.html">➔ Academic Calendar</a></li>
+            <li><a href="mandatory-public-disclosure.html" style="color: #fbbf24; font-weight: 700;">➔ Mandatory Public Disclosure</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Official Portal</h4>
+          <ul class="footer-links">
+            <li><a href="notices.html">➔ Notices & Circulars</a></li>
+            <li><a href="downloads.html">➔ Downloads & Proformas</a></li>
+            <li><a href="transfer-certificates.html">➔ Transfer Certificates (TC)</a></li>
+            <li><a href="school-management.html">➔ School Management (SMC)</a></li>
+            <li><a href="results-achievements.html">➔ Results & Achievements</a></li>
+            <li><a href="gallery.html">➔ Photo Gallery</a></li>
+            <li><a href="contact.html">➔ Contact & Grievance Desk</a></li>
+            <li><a href="admin.html">➔ School Admin Login</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Contact Information</h4>
+          <ul class="footer-contact-list">
+            <li class="footer-contact-item">
+              <span>📍</span>
+              <span><strong>Address:</strong> [OFFICIAL SCHOOL ADDRESS], [PIN CODE]</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>📞</span>
+              <span><strong>Phone:</strong> [OFFICIAL PHONE NUMBER]</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>✉️</span>
+              <span><strong>Email:</strong> [OFFICIAL SCHOOL EMAIL]</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>🕒</span>
+              <span><strong>Office Hours:</strong> Mon – Sat: 8:00 AM – 3:30 PM</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>🏛️</span>
+              <span><strong>Affiliation No:</strong> [OFFICIAL CBSE AFFILIATION NUMBER]</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>🏷️</span>
+              <span><strong>School Code:</strong> [OFFICIAL SCHOOL CODE]</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          © 2026 Saraswati Shishu Vidya Mandir. All Rights Reserved. | Affiliated to CBSE, New Delhi (Classes 1–10).
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <a href="mandatory-public-disclosure.html" style="color: #fde68a;">Mandatory Disclosure</a>
+          <a href="downloads.html" style="color: #cbd5e1;">School Policies</a>
+          <a href="contact.html" style="color: #cbd5e1;">Contact Us</a>
+        </div>
+        <p class="footer-disclaimer-note">
+          <strong>CBSE Compliance Disclaimer:</strong> All official data, certificates, and affiliations are maintained and verified directly by the school administration. In accordance with CBSE guidelines, placeholders are displayed until verified by Saraswati Shishu Vidya Mandir.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

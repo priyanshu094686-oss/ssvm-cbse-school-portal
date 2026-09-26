@@ -1,0 +1,57 @@
+{
+  "name": "ssvm-cbse-school-portal",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Production-ready backend, database, authentication, file storage, and admin system for Saraswati Shishu Vidya Mandir (CBSE Affiliated)",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch backend/src/server.ts",
+    "build": "tsc",
+    "vercel-build": "tsc",
+    "start": "node dist/backend/src/server.js",
+    "tunnel": "node scripts/tunnel.mjs",
+    "db:migrate": "tsx database/migrate.ts",
+    "db:seed": "tsx database/seed.ts",
+    "db:reset": "tsx database/reset.ts",
+    "test": "tsx tests/run_all_tests.ts"
+  },
+  "keywords": [
+    "cbse",
+    "school-management",
+    "mandatory-public-disclosure",
+    "vidya-mandir"
+  ],
+  "author": "Saraswati Shishu Vidya Mandir Administration",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.1",
+    "bcryptjs": "^3.0.2",
+    "compression": "^1.8.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "pg": "^8.13.3",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/compression": "^1.7.5",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/morgan": "^1.9.9",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.13.9",
+    "@types/pg": "^8.11.11",
+    "localtunnel": "^2.0.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}

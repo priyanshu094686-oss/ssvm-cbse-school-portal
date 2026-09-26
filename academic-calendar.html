@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Annual Academic Calendar (2026–2027) | Saraswati Shishu Vidya Mandir</title>
+  <meta name="description" content="Official Academic Calendar of Saraswati Shishu Vidya Mandir for session 2026-2027. Examination dates, gazetted holidays, cultural celebrations, and vacation breaks.">
+  <meta name="keywords" content="Academic Calendar, CBSE School Calendar, Examination Dates, School Holidays, Saraswati Shishu Vidya Mandir, Annual Planner">
+  
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg">
+  <style>
+    .view-toggle-btns {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .view-btn {
+      padding: 0.4rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-alt);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .view-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+    .calendar-grid-view {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .month-card {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .month-header {
+      background: var(--primary);
+      color: #ffffff;
+      padding: 0.6rem 1rem;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.85rem;
+      text-align: center;
+    }
+    .month-event-item {
+      padding: 0.5rem 0;
+      border-bottom: 1px dashed var(--border-light);
+      font-size: 0.85rem;
+    }
+    .month-event-item:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Accessibility & Info Bar -->
+  <aside class="top-bar">
+    <div class="container">
+      <div class="top-bar-left">
+        <span class="cbse-affil-badge">CBSE AFFILIATED | CLASSES 1–10</span>
+        <div class="top-info-item">
+          <span>📍</span>
+          <span>[OFFICIAL SCHOOL ADDRESS], [PIN CODE]</span>
+        </div>
+        <div class="top-info-item">
+          <span>📞</span>
+          <span>[OFFICIAL PHONE NUMBER]</span>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div class="accessibility-controls">
+          <span style="font-size: 0.75rem; color: #94a3b8; margin-right: 0.25rem;">Font:</span>
+          <button class="font-btn" id="font-dec" title="Decrease Font Size">A-</button>
+          <button class="font-btn" id="font-reset" title="Reset Font Size">A</button>
+          <button class="font-btn" id="font-inc" title="Increase Font Size">A+</button>
+        </div>
+        <button class="admin-link-btn" data-open-search title="Search Website (Ctrl+K)">
+          <span>🔍</span> Search
+        </button>
+        <a href="admin.html" class="admin-link-btn" title="School Administration Portal">
+          <span>⚙️</span> Admin Portal
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Header Branding -->
+  <header class="main-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="brand-wrapper">
+          <img src="assets/images/logo.jpg" alt="Saraswati Shishu Vidya Mandir Crest" class="brand-logo">
+          <div class="brand-text">
+            <h1 class="school-title">Saraswati Shishu Vidya Mandir</h1>
+            <span class="school-subtitle">Affiliated to Central Board of Secondary Education (CBSE)</span>
+            <span class="school-motto-tag">सा विद्या या विमुक्तये • Classes 1 to 10</span>
+          </div>
+        </a>
+
+        <div class="header-actions">
+          <a href="mandatory-public-disclosure.html" class="btn-mandatory-disclosure">
+            <span class="disclosure-icon">📋</span>
+            <span>MANDATORY PUBLIC DISCLOSURE</span>
+          </a>
+
+          <button class="mobile-nav-toggle" id="mobile-menu-toggle" aria-label="Open Navigation Menu">
+            ☰
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Primary Navigation Bar -->
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="container">
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="index.html" class="nav-link">HOME</a></li>
+        <li class="nav-item"><a href="about-school.html" class="nav-link">ABOUT SCHOOL</a></li>
+        <li class="nav-item"><a href="academics.html" class="nav-link">ACADEMICS</a></li>
+        <li class="nav-item"><a href="admissions.html" class="nav-link">ADMISSIONS</a></li>
+        <li class="nav-item"><a href="faculty-staff.html" class="nav-link">FACULTY & STAFF</a></li>
+        <li class="nav-item"><a href="infrastructure.html" class="nav-link">INFRASTRUCTURE</a></li>
+        <li class="nav-item"><a href="fee-structure.html" class="nav-link">FEES</a></li>
+        <li class="nav-item active"><a href="academic-calendar.html" class="nav-link">ACADEMIC CALENDAR</a></li>
+        <li class="nav-item"><a href="transfer-certificates.html" class="nav-link">TC VERIFICATION</a></li>
+        <li class="nav-item"><a href="school-management.html" class="nav-link">MANAGEMENT (SMC)</a></li>
+        <li class="nav-item"><a href="notices.html" class="nav-link">NOTICES</a></li>
+        <li class="nav-item"><a href="results-achievements.html" class="nav-link">RESULTS</a></li>
+        <li class="nav-item"><a href="gallery.html" class="nav-link">GALLERY</a></li>
+        <li class="nav-item"><a href="downloads.html" class="nav-link">DOWNLOADS</a></li>
+        <li class="nav-item"><a href="mandatory-public-disclosure.html" class="nav-link highlight-link">MANDATORY PUBLIC DISCLOSURE</a></li>
+        <li class="nav-item"><a href="contact.html" class="nav-link">CONTACT</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay"></div>
+  <aside class="mobile-drawer" id="mobile-drawer">
+    <div class="drawer-header">
+      <h3 class="drawer-title">Menu Navigation</h3>
+      <button class="drawer-close-btn" id="drawer-close">&times;</button>
+    </div>
+    <ul class="drawer-menu">
+      <li><a href="index.html" class="drawer-link">Home</a></li>
+      <li><a href="mandatory-public-disclosure.html" class="drawer-link drawer-highlight">📋 Mandatory Public Disclosure</a></li>
+      <li><a href="about-school.html" class="drawer-link">About School</a></li>
+      <li><a href="academics.html" class="drawer-link">Academics (Classes 1–10)</a></li>
+      <li><a href="admissions.html" class="drawer-link">Admissions 2026–27</a></li>
+      <li><a href="faculty-staff.html" class="drawer-link">Faculty & Staff</a></li>
+      <li><a href="infrastructure.html" class="drawer-link">Infrastructure</a></li>
+      <li><a href="fee-structure.html" class="drawer-link">Fee Structure</a></li>
+      <li><a href="academic-calendar.html" class="drawer-link active">Academic Calendar</a></li>
+      <li><a href="transfer-certificates.html" class="drawer-link">Transfer Certificates</a></li>
+      <li><a href="school-management.html" class="drawer-link">School Management (SMC)</a></li>
+      <li><a href="notices.html" class="drawer-link">Notices & Circulars</a></li>
+      <li><a href="results-achievements.html" class="drawer-link">Results & Achievements</a></li>
+      <li><a href="gallery.html" class="drawer-link">Photo Gallery</a></li>
+      <li><a href="downloads.html" class="drawer-link">Downloads Center</a></li>
+      <li><a href="contact.html" class="drawer-link">Contact Information</a></li>
+      <li><a href="admin.html" class="drawer-link" style="color: var(--accent-dark);">⚙️ Admin Management Portal</a></li>
+    </ul>
+  </aside>
+
+  <!-- Page Banner -->
+  <section class="page-banner">
+    <div class="container">
+      <div class="page-banner-inner">
+        <div>
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <span>Academic Calendar</span>
+          </nav>
+          <h1 class="page-banner-title">Annual Academic Calendar (2026–2027)</h1>
+          <p class="page-banner-desc">
+            Complete schedule of instructional working days, assessments, terminal examinations, gazetted breaks, and co-curricular celebrations.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button onclick="window.print()" class="btn btn-accent btn-sm">
+            <span>🖨️</span> Print Calendar
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="section">
+    <div class="container">
+
+      <!-- CBSE Compliance Alert -->
+      <div class="safety-alert-box">
+        <strong>Academic Session:</strong> The academic year runs from <strong>1st April to 31st March</strong>. In accordance with CBSE norms, a minimum of 220 instructional days are maintained for effective syllabus transaction and holistic student activities.
+      </div>
+
+      <!-- Controls & Filter Bar -->
+      <div class="filter-bar">
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+          <div class="view-toggle-btns">
+            <button class="view-btn active" id="btn-show-timeline">Timeline View</button>
+            <button class="view-btn" id="btn-show-grid">Monthly Grid View</button>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <label for="calendar-month-filter" style="font-size: 0.85rem; font-weight: 600;">Filter by Month:</label>
+            <select id="calendar-month-filter" class="form-control" style="padding: 0.35rem 0.75rem; width: auto;">
+              <option value="all">All Months (Apr 2026 – Mar 2027)</option>
+              <option value="April 2026">April 2026</option>
+              <option value="May 2026">May 2026</option>
+              <option value="July 2026">July 2026</option>
+              <option value="August 2026">August 2026</option>
+              <option value="September 2026">September 2026</option>
+              <option value="October 2026">October 2026</option>
+              <option value="November 2026">November 2026</option>
+              <option value="December 2026">December 2026</option>
+              <option value="January 2027">January 2027</option>
+              <option value="February 2027">February 2027</option>
+              <option value="March 2027">March 2027</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <span class="badge badge-cbse">Academic Session: 2026–2027</span>
+        </div>
+      </div>
+
+      <!-- 1. TIMELINE VIEW -->
+      <div id="calendar-timeline-container" class="calendar-timeline">
+        <!-- April 2026 -->
+        <div class="timeline-item" data-month="April 2026">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">April 01, 2026</div>
+            <h3 class="timeline-title">Commencement of Academic Session 2026–2027</h3>
+            <p class="card-text" style="margin-bottom: 0;">School re-opens for Classes 1 to 10 with traditional Vedic Havan and orientation assembly.</p>
+            <span class="badge badge-cbse" style="margin-top: 0.5rem;">Academic</span>
+          </div>
+        </div>
+
+        <!-- May 2026 -->
+        <div class="timeline-item" data-month="May 2026">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">May 15 to June 20, 2026</div>
+            <h3 class="timeline-title">Summer Vacation & Holiday Homework Assignment</h3>
+            <p class="card-text" style="margin-bottom: 0;">Summer break commences for students. Project portfolios and reading assignments assigned.</p>
+            <span class="badge badge-pending" style="margin-top: 0.5rem;">Holiday</span>
+          </div>
+        </div>
+
+        <!-- July 2026 -->
+        <div class="timeline-item" data-month="July 2026">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">July 15 to July 22, 2026</div>
+            <h3 class="timeline-title">Periodic Assessment – I (PA-1)</h3>
+            <p class="card-text" style="margin-bottom: 0;">Written evaluation of early term concepts across all subjects for Classes 1 through 10.</p>
+            <span class="badge badge-cbse" style="margin-top: 0.5rem;">Examination</span>
+          </div>
+        </div>
+
+        <!-- August 2026 -->
+        <div class="timeline-item" data-month="August 2026">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">August 15, 2026</div>
+            <h3 class="timeline-title">Independence Day & Cultural Exhibition</h3>
+            <p class="card-text" style="margin-bottom: 0;">National flag hoisting, patriotic songs, drill display, and prize distribution for inter-house events.</p>
+            <span class="badge badge-verified" style="margin-top: 0.5rem;">Events</span>
+          </div>
+        </div>
+
+        <!-- September 2026 -->
+        <div class="timeline-item" data-month="September 2026">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">September 18 to September 30, 2026</div>
+            <h3 class="timeline-title">Mid-Term / Half-Yearly Examinations</h3>
+            <p class="card-text" style="margin-bottom: 0;">Comprehensive mid-term evaluations for Classes 1 to 10 covering 50% of the annual syllabus.</p>
+            <span class="badge badge-cbse" style="margin-top: 0.5rem;">Examination</span>
+          </div>
+        </div>
+
+        <!-- October 2026 -->
+        <div class="timeline-item" data-month="October 2026">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">October 02 & Autumn Break</div>
+            <h3 class="timeline-title">Gandhi Jayanti & Dussehra Holidays</h3>
+            <p class="card-text" style="margin-bottom: 0;">Observance of Mahatma Gandhi's birth anniversary followed by festive break.</p>
+            <span class="badge badge-pending" style="margin-top: 0.5rem;">Holiday</span>
+          </div>
+        </div>
+
+        <!-- November 2026 -->
+        <div class="timeline-item" data-month="November 2026">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">November 14, 2026</div>
+            <h3 class="timeline-title">Children's Day & Annual Sports Meet (Khel Diwas)</h3>
+            <p class="card-text" style="margin-bottom: 0;">Annual sports competitions, track events, indigenous sports tournaments, and special assemblies.</p>
+            <span class="badge badge-verified" style="margin-top: 0.5rem;">Events</span>
+          </div>
+        </div>
+
+        <!-- December 2026 -->
+        <div class="timeline-item" data-month="December 2026">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">December 10 to December 18, 2026</div>
+            <h3 class="timeline-title">Periodic Assessment – II (PA-2) & Pre-Board 1 (Class 10)</h3>
+            <p class="card-text" style="margin-bottom: 0;">Post-midterm assessment for Classes 1 to 9 and first full-syllabus pre-board for Class 10 candidates.</p>
+            <span class="badge badge-cbse" style="margin-top: 0.5rem;">Examination</span>
+          </div>
+        </div>
+
+        <!-- January 2027 -->
+        <div class="timeline-item" data-month="January 2027">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">January 26, 2027</div>
+            <h3 class="timeline-title">Republic Day Celebration & Pre-Board 2 (Class 10)</h3>
+            <p class="card-text" style="margin-bottom: 0;">Ceremonial flag hoisting and final preparatory pre-board examination for Class 10 candidates.</p>
+            <span class="badge badge-verified" style="margin-top: 0.5rem;">Events</span>
+          </div>
+        </div>
+
+        <!-- February 2027 -->
+        <div class="timeline-item" data-month="February 2027">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">February 15, 2027 onwards</div>
+            <h3 class="timeline-title">CBSE AISSE Class 10 Board Examinations</h3>
+            <p class="card-text" style="margin-bottom: 0;">Official Class 10 Board Examinations conducted as per CBSE date sheet and exam centres.</p>
+            <span class="badge badge-cbse" style="margin-top: 0.5rem;">Board Exam</span>
+          </div>
+        </div>
+
+        <!-- March 2027 -->
+        <div class="timeline-item" data-month="March 2027">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-date">March 05 to March 20, 2027</div>
+            <h3 class="timeline-title">Annual Examination (Classes 1–9) & Result Declaration</h3>
+            <p class="card-text" style="margin-bottom: 0;">Summative annual examinations, report card compilation, and Parent-Teacher Meeting (PTM).</p>
+            <span class="badge badge-cbse" style="margin-top: 0.5rem;">Examination</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. MONTHLY GRID VIEW (Hidden by default) -->
+      <div id="calendar-grid-container" class="calendar-grid-view" style="display: none; margin-top: 2rem;">
+        <div class="month-card">
+          <div class="month-header">April 2026</div>
+          <div class="month-event-item"><strong>Apr 01:</strong> New Session Begins</div>
+          <div class="month-event-item"><strong>Apr 14:</strong> Dr. Ambedkar Jayanti</div>
+        </div>
+        <div class="month-card">
+          <div class="month-header">May 2026</div>
+          <div class="month-event-item"><strong>May 15:</strong> Summer Vacation Commences</div>
+        </div>
+        <div class="month-card">
+          <div class="month-header">July 2026</div>
+          <div class="month-event-item"><strong>Jul 01:</strong> School Reopens after Break</div>
+          <div class="month-event-item"><strong>Jul 15–22:</strong> Periodic Assessment - I</div>
+        </div>
+        <div class="month-card">
+          <div class="month-header">August 2026</div>
+          <div class="month-event-item"><strong>Aug 15:</strong> Independence Day Celebration</div>
+          <div class="month-event-item"><strong>Aug 28:</strong> Raksha Bandhan Break</div>
+        </div>
+        <div class="month-card">
+          <div class="month-header">September 2026</div>
+          <div class="month-event-item"><strong>Sep 05:</strong> Teachers' Day</div>
+          <div class="month-event-item"><strong>Sep 18–30:</strong> Mid-Term Examinations</div>
+        </div>
+        <div class="month-card">
+          <div class="month-header">October 2026</div>
+          <div class="month-event-item"><strong>Oct 02:</strong> Gandhi Jayanti</div>
+          <div class="month-event-item"><strong>Oct 20–25:</strong> Dussehra / Autumn Break</div>
+        </div>
+        <div class="month-card">
+          <div class="month-header">November 2026</div>
+          <div class="month-event-item"><strong>Nov 12:</strong> Diwali Break</div>
+          <div class="month-event-item"><strong>Nov 14:</strong> Children's Day & Sports Meet</div>
+        </div>
+        <div class="month-card">
+          <div class="month-header">December 2026</div>
+          <div class="month-event-item"><strong>Dec 10–18:</strong> PA-2 & Pre-Board-1</div>
+          <div class="month-event-item"><strong>Dec 25:</strong> Winter Break Begins</div>
+        </div>
+        <div class="month-card">
+          <div class="month-header">January 2027</div>
+          <div class="month-event-item"><strong>Jan 15:</strong> Makar Sankranti</div>
+          <div class="month-event-item"><strong>Jan 26:</strong> Republic Day</div>
+        </div>
+        <div class="month-card">
+          <div class="month-header">February 2027</div>
+          <div class="month-event-item"><strong>Feb 15+:</strong> CBSE Class 10 Board Exams</div>
+        </div>
+        <div class="month-card">
+          <div class="month-header">March 2027</div>
+          <div class="month-event-item"><strong>Mar 05–20:</strong> Annual Exams (1–9)</div>
+          <div class="month-event-item"><strong>Mar 28:</strong> Result Declaration & PTM</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Global Search Modal -->
+  <div class="modal-overlay" id="global-search-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Search School Portal</h3>
+        <button class="modal-close-btn" id="close-global-search">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <input type="text" id="global-search-input" class="form-control" placeholder="Search calendar events, holidays, examinations..." autofocus>
+        </div>
+        <div id="global-search-results"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Official Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+            <img src="assets/images/logo.jpg" alt="Saraswati Shishu Vidya Mandir Logo" style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--accent);">
+            <h3 class="footer-brand-title">Saraswati Shishu Vidya Mandir</h3>
+          </div>
+          <p class="footer-desc">
+            A premier CBSE-affiliated co-educational institution delivering foundational and secondary education (Classes 1–10) in alignment with Indian cultural values and CBSE educational standards.
+          </p>
+          <div class="footer-disclosure-callout">
+            <p><strong>CBSE Compliance:</strong> Mandatory Public Disclosure is maintained under Appendix IX of CBSE Affiliation Bye-Laws.</p>
+            <a href="mandatory-public-disclosure.html" class="btn btn-accent btn-sm" style="width: 100%;">
+              <span>📋</span> Mandatory Public Disclosure
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="about-school.html">➔ About School</a></li>
+            <li><a href="academics.html">➔ Academics (Classes 1–10)</a></li>
+            <li><a href="admissions.html">➔ Admissions Process</a></li>
+            <li><a href="faculty-staff.html">➔ Faculty & Staff</a></li>
+            <li><a href="infrastructure.html">➔ Infrastructure & Labs</a></li>
+            <li><a href="fee-structure.html">➔ Fee Structure</a></li>
+            <li><a href="academic-calendar.html">➔ Academic Calendar</a></li>
+            <li><a href="mandatory-public-disclosure.html" style="color: #fbbf24; font-weight: 700;">➔ Mandatory Public Disclosure</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Official Portal</h4>
+          <ul class="footer-links">
+            <li><a href="notices.html">➔ Notices & Circulars</a></li>
+            <li><a href="downloads.html">➔ Downloads & Proformas</a></li>
+            <li><a href="transfer-certificates.html">➔ Transfer Certificates (TC)</a></li>
+            <li><a href="school-management.html">➔ School Management (SMC)</a></li>
+            <li><a href="results-achievements.html">➔ Results & Achievements</a></li>
+            <li><a href="gallery.html">➔ Photo Gallery</a></li>
+            <li><a href="contact.html">➔ Contact & Grievance Desk</a></li>
+            <li><a href="admin.html">➔ School Admin Login</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Contact Information</h4>
+          <ul class="footer-contact-list">
+            <li class="footer-contact-item">
+              <span>📍</span>
+              <span><strong>Address:</strong> [OFFICIAL SCHOOL ADDRESS], [PIN CODE]</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>📞</span>
+              <span><strong>Phone:</strong> [OFFICIAL PHONE NUMBER]</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>✉️</span>
+              <span><strong>Email:</strong> [OFFICIAL SCHOOL EMAIL]</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>🕒</span>
+              <span><strong>Office Hours:</strong> Mon – Sat: 8:00 AM – 3:30 PM</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>🏛️</span>
+              <span><strong>Affiliation No:</strong> [OFFICIAL CBSE AFFILIATION NUMBER]</span>
+            </li>
+            <li class="footer-contact-item">
+              <span>🏷️</span>
+              <span><strong>School Code:</strong> [OFFICIAL SCHOOL CODE]</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          © 2026 Saraswati Shishu Vidya Mandir. All Rights Reserved. | Affiliated to CBSE, New Delhi (Classes 1–10).
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <a href="mandatory-public-disclosure.html" style="color: #fde68a;">Mandatory Disclosure</a>
+          <a href="downloads.html" style="color: #cbd5e1;">School Policies</a>
+          <a href="contact.html" style="color: #cbd5e1;">Contact Us</a>
+        </div>
+        <p class="footer-disclaimer-note">
+          <strong>CBSE Compliance Disclaimer:</strong> All official data, certificates, and affiliations are maintained and verified directly by the school administration. In accordance with CBSE guidelines, placeholders are displayed until verified by Saraswati Shishu Vidya Mandir.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    // View Toggle Logic
+    const btnTimeline = document.getElementById("btn-show-timeline");
+    const btnGrid = document.getElementById("btn-show-grid");
+    const containerTimeline = document.getElementById("calendar-timeline-container");
+    const containerGrid = document.getElementById("calendar-grid-container");
+
+    if (btnTimeline && btnGrid && containerTimeline && containerGrid) {
+      btnTimeline.addEventListener("click", () => {
+        btnTimeline.classList.add("active");
+        btnGrid.classList.remove("active");
+        containerTimeline.style.display = "block";
+        containerGrid.style.display = "none";
+      });
+
+      btnGrid.addEventListener("click", () => {
+        btnGrid.classList.add("active");
+        btnTimeline.classList.remove("active");
+        containerTimeline.style.display = "none";
+        containerGrid.style.display = "grid";
+      });
+    }
+
+    function renderCalendarTimeline() {
+      const data = SchoolData.get();
+      if (containerTimeline && data.academicEvents && Array.isArray(data.academicEvents)) {
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        containerTimeline.innerHTML = data.academicEvents.map(ev => {
+          const d = new Date(ev.date || ev.start_date || "2026-04-01");
+          const mName = !isNaN(d.getMonth()) ? `${monthNames[d.getMonth()]} ${d.getFullYear()}` : "April 2026";
+          const badgeClass = ev.category === 'Examination' ? 'badge-cbse' : (ev.category === 'Holiday' ? 'badge-pending' : (ev.category === 'Events' ? 'badge-verified' : 'badge-cbse'));
+
+          return `
+            <div class="timeline-item" data-month="${mName}">
+              <div class="timeline-dot"></div>
+              <div class="timeline-card">
+                <div class="timeline-date">${ev.date || ev.start_date}</div>
+                <h3 class="timeline-title">${ev.title}</h3>
+                <span class="badge ${badgeClass}" style="margin-top: 0.5rem;">${ev.category || ev.event_type}</span>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        if (typeof initCalendarViews === 'function') {
+          initCalendarViews();
+        }
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", renderCalendarTimeline);
+    window.addEventListener("schoolDataUpdated", renderCalendarTimeline);
+  </script>
+</body>
+</html>

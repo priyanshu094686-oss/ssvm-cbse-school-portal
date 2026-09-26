@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard & Portal | Saraswati Shishu Vidya Mandir</title>
+  <meta name="description" content="Administration content management portal for updating CBSE Mandatory Public Disclosure, faculty details, notices, fee structures, and calendar.">
+  <meta name="robots" content="noindex, nofollow">
+  
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg">
+  <style>
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .admin-sidebar {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      padding: 1rem 0;
+      box-shadow: var(--shadow-sm);
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+    .admin-nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      border-left: 4px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .admin-nav-item:hover, .admin-nav-item.active {
+      background: var(--bg-alt);
+      color: var(--primary);
+      border-left-color: var(--accent);
+    }
+    .admin-tab-pane {
+      display: none;
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .admin-tab-pane.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .stat-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: #ffffff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.1;
+      margin: 0.35rem 0;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .auth-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(16, 185, 129, 0.2);
+      color: #047857;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+    .login-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .login-box {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: var(--shadow-xl);
+      border: 2px solid var(--accent);
+    }
+    @media (max-width: 900px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+      }
+      .admin-sidebar {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Modal View (Visible if not authenticated) -->
+  <div class="login-overlay" id="admin-login-modal">
+    <div class="login-box">
+      <div style="text-align: center; margin-bottom: 1.75rem;">
+        <img src="assets/images/logo.jpg" alt="Logo" style="width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--accent); margin: 0 auto 0.75rem;">
+        <h2 style="font-size: 1.4rem; color: var(--primary);">Administrative Sign In</h2>
+        <span class="cbse-affil-badge" style="margin-top: 0.35rem;">SARASWATI SHISHU VIDYA MANDIR</span>
+      </div>
+
+      <form id="admin-login-form">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Official Admin Email</label>
+          <input type="email" id="login-email" class="form-control" value="admin@ssvm.edu.in" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <input type="password" id="login-password" class="form-control" value="Admin@SSVM2026!" required>
+        </div>
+
+        <div style="background: var(--bg-alt); padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          <strong>Default Admin Credentials:</strong><br>
+          Super Admin: <code>admin@ssvm.edu.in</code> / <code>Admin@SSVM2026!</code><br>
+          Editor: <code>editor@ssvm.edu.in</code> / <code>Editor@SSVM2026!</code>
+        </div>
+
+        <button type="submit" class="btn btn-accent btn-lg" style="width: 100%;">
+          <span>🔒</span> Authenticate & Enter Portal
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Top Accessibility & Info Bar -->
+  <aside class="top-bar">
+    <div class="container">
+      <div class="top-bar-left">
+        <span class="auth-badge" id="admin-user-badge">
+          <span>🛡️</span> <span id="admin-user-role">SUPER_ADMIN</span>: <span id="admin-user-name">Administrator</span>
+        </span>
+        <div class="top-info-item">
+          <span>🏛️</span>
+          <span>Saraswati Shishu Vidya Mandir Content Management System</span>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <a href="index.html" class="admin-link-btn" title="Return to Public Website">
+          <span>🏠</span> View Public Website
+        </a>
+        <button class="admin-link-btn" id="btn-admin-logout" style="background: rgba(220, 38, 38, 0.2); border-color: rgba(239, 68, 68, 0.4);">
+          <span>🚪</span> Logout
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Header Branding -->
+  <header class="main-header">
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="brand-wrapper">
+          <img src="assets/images/logo.jpg" alt="Saraswati Shishu Vidya Mandir Crest" class="brand-logo">
+          <div class="brand-text">
+            <h1 class="school-title">Saraswati Shishu Vidya Mandir</h1>
+            <span class="school-subtitle">Administration Control Center & API Manager</span>
+            <span class="school-motto-tag">CBSE Appendix IX & Institutional Database</span>
+          </div>
+        </a>
+
+        <div class="header-actions">
+          <a href="mandatory-public-disclosure.html" class="btn-mandatory-disclosure">
+            <span class="disclosure-icon">📋</span>
+            <span>PUBLIC DISCLOSURE</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Banner -->
+  <section class="page-banner" style="background: linear-gradient(135deg, #0a192f 0%, #0f2942 100%);">
+    <div class="container">
+      <div class="page-banner-inner">
+        <div>
+          <h1 class="page-banner-title">School Administration Control Center</h1>
+          <p class="page-banner-desc">
+            Manage CBSE Mandatory Disclosure documents, upload certificates, edit faculty details, post circulars, update fee schedules, and audit access logs.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <button class="btn btn-outline-white btn-sm" id="btn-export-backup">
+            <span>💾</span> Export Backup (JSON)
+          </button>
+          <button class="btn btn-outline-white btn-sm" id="btn-import-backup">
+            <span>📂</span> Import Backup
+          </button>
+          <input type="file" id="import-file-input" accept=".json" style="display: none;">
+          <button class="btn btn-accent btn-sm" id="btn-reset-data">
+            <span>🔄</span> Reset to Defaults
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Admin Layout -->
+  <main class="section">
+    <div class="container">
+
+      <!-- Navigation & Layout -->
+      <div class="admin-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+          <div class="admin-nav-item active" data-tab="tab-dashboard">
+            <span>📊 Dashboard Overview</span>
+          </div>
+          <div class="admin-nav-item" data-tab="tab-general">
+            <span>🏛️ General Information</span>
+          </div>
+          <div class="admin-nav-item" data-tab="tab-disclosure">
+            <span>📋 Mandatory Disclosure</span>
+            <span class="badge badge-pending" id="badge-pending-docs">0</span>
+          </div>
+          <div class="admin-nav-item" data-tab="tab-faculty">
+            <span>👥 Faculty & Staff</span>
+          </div>
+          <div class="admin-nav-item" data-tab="tab-notices">
+            <span>📢 Notices & Circulars</span>
+          </div>
+          <div class="admin-nav-item" data-tab="tab-fees">
+            <span>💰 Fee Structure</span>
+          </div>
+          <div class="admin-nav-item" data-tab="tab-calendar">
+            <span>📅 Academic Calendar</span>
+          </div>
+          <div class="admin-nav-item" data-tab="tab-admissions">
+            <span>📝 Admission Enquiries</span>
+            <span class="badge badge-cbse" id="badge-new-enquiries">0</span>
+          </div>
+          <div class="admin-nav-item" data-tab="tab-contacts">
+            <span>✉️ Contact Messages</span>
+          </div>
+          <div class="admin-nav-item" data-tab="tab-smc">
+            <span>🏛️ SMC Committee</span>
+          </div>
+          <div class="admin-nav-item" data-tab="tab-tc">
+            <span>📜 Transfer Certificates</span>
+          </div>
+          <div class="admin-nav-item" data-tab="tab-audit">
+            <span>🔒 Security Audit Logs</span>
+          </div>
+        </aside>
+
+        <!-- Main Content Panes -->
+        <div class="admin-content">
+
+          <!-- TAB 0: DASHBOARD OVERVIEW -->
+          <div class="admin-tab-pane active" id="tab-dashboard">
+            <h2 style="font-size: 1.4rem; color: var(--primary); margin-bottom: 1.25rem;">
+              Executive Portal Dashboard
+            </h2>
+
+            <!-- Metric Stat Cards -->
+            <div class="stat-card-grid">
+              <div class="stat-card">
+                <span class="stat-label">Teaching Staff</span>
+                <div class="stat-num" id="dash-stat-teachers">8</div>
+                <span style="font-size: 0.8rem; color: var(--success);">PTR: 1:30 Compliant</span>
+              </div>
+
+              <div class="stat-card">
+                <span class="stat-label">Published Notices</span>
+                <div class="stat-num" id="dash-stat-notices">3</div>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Active Announcements</span>
+              </div>
+
+              <div class="stat-card">
+                <span class="stat-label">Mandatory Docs</span>
+                <div class="stat-num" id="dash-stat-docs">8</div>
+                <span style="font-size: 0.8rem; color: var(--accent-dark);">Appendix IX Matrix</span>
+              </div>
+
+              <div class="stat-card">
+                <span class="stat-label">New Enquiries</span>
+                <div class="stat-num" id="dash-stat-enquiries" style="color: var(--accent);">0</div>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Awaiting Contact</span>
+              </div>
+            </div>
+
+            <!-- Document Compliance Status Alert Box -->
+            <div class="card" style="border-left: 5px solid var(--accent); margin-bottom: 2rem;">
+              <h3 style="font-size: 1.2rem; color: var(--primary); margin-bottom: 0.5rem;">
+                📋 CBSE Disclosure Documents Status Tracking
+              </h3>
+              <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">
+                CBSE Affiliation Bye-Laws mandate that all 8 categories of official statutory certificates must be kept up-to-date.
+              </p>
+              <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <div class="badge badge-verified" id="dash-doc-available" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">Available: 0</div>
+                <div class="badge badge-pending" id="dash-doc-pending" style="padding: 0.4rem 0.85rem; font-size: 0.85rem;">Pending Upload: 8</div>
+                <div class="badge badge-pending" id="dash-doc-expiring" style="background: #fee2e2; color: #b91c1c; border-color: #fca5a5; padding: 0.4rem 0.85rem; font-size: 0.85rem;">Expiring Soon: 0</div>
+                <div class="badge badge-pending" id="dash-doc-expired" style="background: #fef2f2; color: #991b1b; padding: 0.4rem 0.85rem; font-size: 0.85rem;">Expired: 0</div>
+              </div>
+            </div>
+
+            <!-- Quick Action Shortcuts -->
+            <div class="grid-2">
+              <div class="card">
+                <h4 style="color: var(--primary); margin-bottom: 0.75rem;">Quick Document Upload</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Upload building safety, fire safety, or affiliation extension letters directly.</p>
+                <button class="btn btn-accent btn-sm" onclick="switchTab('tab-disclosure')">Go to Mandatory Documents ➔</button>
+              </div>
+
+              <div class="card">
+                <h4 style="color: var(--primary); margin-bottom: 0.75rem;">Manage Staff Directory</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Add or update teaching staff qualifications, subjects, and designations.</p>
+                <button class="btn btn-primary btn-sm" onclick="switchTab('tab-faculty')">Go to Faculty Management ➔</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 1: GENERAL INFORMATION -->
+          <div class="admin-tab-pane" id="tab-general">
+            <h2 style="font-size: 1.4rem; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem;">
+              General School & Affiliation Information
+            </h2>
+
+            <form id="form-general-info">
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="adm-school-name">School Name *</label>
+                  <input type="text" id="adm-school-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="adm-affil-no">CBSE Affiliation Number *</label>
+                  <input type="text" id="adm-affil-no" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="adm-school-code">CBSE School Code *</label>
+                  <input type="text" id="adm-school-code" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="adm-pincode">PIN Code *</label>
+                  <input type="text" id="adm-pincode" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="adm-address">Complete School Address *</label>
+                <textarea id="adm-address" class="form-control" style="min-height: 80px;" required></textarea>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="adm-principal-name">Principal Name *</label>
+                  <input type="text" id="adm-principal-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="adm-principal-qual">Principal Qualification *</label>
+                  <input type="text" id="adm-principal-qual" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="adm-email">School Official Email *</label>
+                  <input type="email" id="adm-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="adm-phone">Official Phone Number *</label>
+                  <input type="text" id="adm-phone" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="adm-principal-msg">Principal's Desk Message</label>
+                <textarea id="adm-principal-msg" class="form-control" style="min-height: 100px;"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-accent btn-lg">
+                <span>💾</span> Save General Information
+              </button>
+            </form>
+          </div>
+
+          <!-- TAB 2: MANDATORY DISCLOSURE DOCS -->
+          <div class="admin-tab-pane" id="tab-disclosure">
+            <h2 style="font-size: 1.4rem; color: var(--primary); margin-bottom: 0.5rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem;">
+              CBSE Appendix IX Mandatory Disclosure Documents (8-Point Matrix)
+            </h2>
+            <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+              Upload official PDF certificates, update issue/validity dates, and verify disclosure documents.
+            </p>
+
+            <div id="adm-doc-list"></div>
+          </div>
+
+          <!-- TAB 3: FACULTY & STAFF -->
+          <div class="admin-tab-pane" id="tab-faculty">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem;">
+              <h2 style="font-size: 1.4rem; color: var(--primary);">Faculty & Staff Directory</h2>
+              <button class="btn btn-primary btn-sm" id="btn-add-teacher"><span>➕</span> Add New Teacher</button>
+            </div>
+
+            <div id="adm-faculty-list"></div>
+          </div>
+
+          <!-- TAB 4: NOTICES -->
+          <div class="admin-tab-pane" id="tab-notices">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem;">
+              <h2 style="font-size: 1.4rem; color: var(--primary);">Notices & Announcements</h2>
+              <button class="btn btn-primary btn-sm" id="btn-add-notice"><span>➕</span> Post Notice</button>
+            </div>
+
+            <div id="adm-notices-list"></div>
+          </div>
+
+          <!-- TAB 5: FEES -->
+          <div class="admin-tab-pane" id="tab-fees">
+            <h2 style="font-size: 1.4rem; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem;">
+              Manage Fee Structure (Classes 1–10)
+            </h2>
+            <form id="form-fee-structure">
+              <div id="adm-fees-container"></div>
+              <button type="submit" class="btn btn-accent btn-lg" style="margin-top: 1.5rem;">
+                <span>💾</span> Save Fee Schedule
+              </button>
+            </form>
+          </div>
+
+          <!-- TAB 6: CALENDAR -->
+          <div class="admin-tab-pane" id="tab-calendar">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem;">
+              <h2 style="font-size: 1.4rem; color: var(--primary);">Academic Calendar Planner</h2>
+              <button class="btn btn-primary btn-sm" id="btn-add-event"><span>➕</span> Add Event</button>
+            </div>
+            <div id="adm-events-list"></div>
+          </div>
+
+          <!-- TAB 7: ADMISSION ENQUIRIES -->
+          <div class="admin-tab-pane" id="tab-admissions">
+            <h2 style="font-size: 1.4rem; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem;">
+              Admission Enquiries Management
+            </h2>
+            <div id="adm-enquiries-list"></div>
+          </div>
+
+          <!-- TAB 8: CONTACT MESSAGES -->
+          <div class="admin-tab-pane" id="tab-contacts">
+            <h2 style="font-size: 1.4rem; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem;">
+              Contact Messages & Feedback
+            </h2>
+            <div id="adm-contacts-list"></div>
+          </div>
+
+          <!-- TAB 9: SMC -->
+          <div class="admin-tab-pane" id="tab-smc">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem;">
+              <h2 style="font-size: 1.4rem; color: var(--primary);">School Managing Committee (SMC)</h2>
+              <button class="btn btn-primary btn-sm" id="btn-add-smc"><span>➕</span> Add SMC Member</button>
+            </div>
+            <div id="adm-smc-list"></div>
+          </div>
+
+          <!-- TAB 10: TC -->
+          <div class="admin-tab-pane" id="tab-tc">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem;">
+              <h2 style="font-size: 1.4rem; color: var(--primary);">Transfer Certificate (TC) Records</h2>
+              <button class="btn btn-primary btn-sm" id="btn-add-tc"><span>➕</span> Issue New TC Record</button>
+            </div>
+            <div id="adm-tc-list"></div>
+          </div>
+
+          <!-- TAB 11: AUDIT LOGS -->
+          <div class="admin-tab-pane" id="tab-audit">
+            <h2 style="font-size: 1.4rem; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem;">
+              Administrative Security Audit Trail
+            </h2>
+            <div id="adm-audit-list"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Generic Admin Edit Modal -->
+  <div class="modal-overlay" id="admin-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="admin-modal-title">Edit Item</h3>
+        <button class="modal-close-btn" onclick="document.getElementById('admin-modal').classList.remove('active')">&times;</button>
+      </div>
+      <div class="modal-body" id="admin-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Official Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>
+          © 2026 Saraswati Shishu Vidya Mandir. Administration Control Portal.
+        </div>
+        <div>
+          <a href="index.html" style="color: #fde68a;">➔ Return to School Home</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Authentication State Management
+    let currentAuthToken = localStorage.getItem("ssvm_token") || null;
+    let currentUser = null;
+
+    try {
+      const storedUser = localStorage.getItem("ssvm_user");
+      if (storedUser) currentUser = JSON.parse(storedUser);
+    } catch {}
+
+    function getAuthHeaders(isJson = true) {
+      const headers = {};
+      if (currentAuthToken) {
+        headers["Authorization"] = `Bearer ${currentAuthToken}`;
+      }
+      if (isJson) {
+        headers["Content-Type"] = "application/json";
+      }
+      return headers;
+    }
+
+    async function checkAuthState() {
+      const modal = document.getElementById("admin-login-modal");
+      if (!currentAuthToken) {
+        modal.style.display = "flex";
+      } else {
+        modal.style.display = "none";
+        if (currentUser) {
+          document.getElementById("admin-user-role").textContent = currentUser.role || "ADMIN";
+          document.getElementById("admin-user-name").textContent = currentUser.full_name || currentUser.email;
+        }
+        await Promise.allSettled([
+          loadDashboardStats(),
+          populateGeneralInfo(),
+          renderDisclosureDocs(),
+          renderFaculty(),
+          renderNotices(),
+          renderFees(),
+          renderCalendar(),
+          renderEnquiries(),
+          renderContacts(),
+          renderSMC(),
+          renderTC(),
+          renderAuditLogs()
+        ]);
+      }
+    }
+
+    // Admin Login Handler
+    document.getElementById("admin-login-form")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+
+      try {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+        const json = await res.json();
+        if (json.success && json.data) {
+          currentAuthToken = json.data.token;
+          currentUser = json.data.user;
+          localStorage.setItem("ssvm_token", currentAuthToken);
+          localStorage.setItem("ssvm_user", JSON.stringify(currentUser));
+          showToast(`Welcome, ${currentUser.full_name}!`, "success");
+          checkAuthState();
+        } else {
+          showToast(json.error?.message || "Invalid credentials.", "danger");
+        }
+      } catch (err) {
+        // Standalone offline fallback login
+        if (email.includes("admin") || email.includes("editor")) {
+          currentAuthToken = "local-admin-token";
+          currentUser = { email, full_name: "School Administrator", role: "SUPER_ADMIN" };
+          localStorage.setItem("ssvm_token", currentAuthToken);
+          localStorage.setItem("ssvm_user", JSON.stringify(currentUser));
+          showToast("Authenticated in local administrator mode.", "success");
+          checkAuthState();
+        } else {
+          showToast("Authentication server unavailable.", "danger");
+        }
+      }
+    });
+
+    // Admin Logout Handler
+    document.getElementById("btn-admin-logout")?.addEventListener("click", async () => {
+      try {
+        if (currentAuthToken) {
+          await fetch("/api/auth/logout", {
+            method: "POST",
+            headers: getAuthHeaders()
+          });
+        }
+      } catch {}
+      localStorage.removeItem("ssvm_token");
+      localStorage.removeItem("ssvm_user");
+      currentAuthToken = null;
+      currentUser = null;
+      showToast("Logged out successfully.", "info");
+      checkAuthState();
+    });
+
+    // Tab Switching Helper
+    window.switchTab = function(tabId) {
+      document.querySelectorAll(".admin-nav-item").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".admin-tab-pane").forEach(p => p.classList.remove("active"));
+      document.querySelector(`[data-tab="${tabId}"]`)?.classList.add("active");
+      document.getElementById(tabId)?.classList.add("active");
+    };
+
+    document.querySelectorAll(".admin-nav-item").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-tab");
+        if (target) switchTab(target);
+      });
+    });
+
+    // 1. DASHBOARD STATS
+    async function loadDashboardStats() {
+      try {
+        const res = await fetch("/api/admin/stats", { headers: getAuthHeaders() });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            const d = json.data;
+            document.getElementById("dash-stat-teachers").textContent = d.total_teachers;
+            document.getElementById("dash-stat-notices").textContent = d.published_notices;
+            document.getElementById("dash-stat-docs").textContent = d.total_documents;
+            document.getElementById("dash-stat-enquiries").textContent = d.admission_enquiries?.new || 0;
+            document.getElementById("badge-new-enquiries").textContent = d.admission_enquiries?.new || 0;
+            document.getElementById("badge-pending-docs").textContent = d.document_status?.pending || 0;
+
+            document.getElementById("dash-doc-available").textContent = `Available: ${d.document_status?.available || 0}`;
+            document.getElementById("dash-doc-pending").textContent = `Pending Upload: ${d.document_status?.pending || 0}`;
+            document.getElementById("dash-doc-expiring").textContent = `Expiring Soon: ${d.document_status?.expiring_soon || 0}`;
+            document.getElementById("dash-doc-expired").textContent = `Expired: ${d.document_status?.expired || 0}`;
+          }
+        }
+      } catch (err) {
+        console.warn("Stats API fallback to local store:", err);
+      }
+    }
+
+    // 2. GENERAL INFORMATION
+    async function populateGeneralInfo() {
+      try {
+        const res = await fetch("/api/school");
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data) {
+            const s = json.data;
+            document.getElementById("adm-school-name").value = s.school_name || "";
+            document.getElementById("adm-affil-no").value = s.affiliation_number || "";
+            document.getElementById("adm-school-code").value = s.school_code || "";
+            document.getElementById("adm-pincode").value = s.pin_code || "";
+            document.getElementById("adm-address").value = s.address || "";
+            document.getElementById("adm-principal-name").value = s.principal_name || "";
+            document.getElementById("adm-principal-qual").value = s.principal_qualification || "";
+            document.getElementById("adm-email").value = s.official_email || "";
+            document.getElementById("adm-phone").value = s.official_phone || "";
+            document.getElementById("adm-principal-msg").value = s.principal_message || "";
+            return;
+          }
+        }
+      } catch {}
+
+      const data = SchoolData.get();
+      const g = data.generalInfo || {};
+      document.getElementById("adm-school-name").value = g.schoolName || "";
+      document.getElementById("adm-affil-no").value = g.affiliationNo || "";
+      document.getElementById("adm-school-code").value = g.schoolCode || "";
+      document.getElementById("adm-pincode").value = g.pinCode || "";
+      document.getElementById("adm-address").value = g.address || "";
+      document.getElementById("adm-principal-name").value = g.principalName || "";
+      document.getElementById("adm-principal-qual").value = g.principalQualification || "";
+      document.getElementById("adm-email").value = g.email || "";
+      document.getElementById("adm-phone").value = g.phone || "";
+      document.getElementById("adm-principal-msg").value = g.principalMessage || "";
+    }
+
+    document.getElementById("form-general-info")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const payload = {
+        school_name: document.getElementById("adm-school-name").value.trim(),
+        affiliation_number: document.getElementById("adm-affil-no").value.trim(),
+        school_code: document.getElementById("adm-school-code").value.trim(),
+        pin_code: document.getElementById("adm-pincode").value.trim(),
+        address: document.getElementById("adm-address").value.trim(),
+        principal_name: document.getElementById("adm-principal-name").value.trim(),
+        principal_qualification: document.getElementById("adm-principal-qual").value.trim(),
+        official_email: document.getElementById("adm-email").value.trim(),
+        official_phone: document.getElementById("adm-phone").value.trim(),
+        principal_message: document.getElementById("adm-principal-msg").value.trim()
+      };
+
+      try {
+        const res = await fetch("/api/admin/school", {
+          method: "PUT",
+          headers: getAuthHeaders(),
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (json.success) {
+          showToast("School Information saved to backend successfully!", "success");
+        }
+      } catch {}
+
+      const data = SchoolData.get();
+      data.generalInfo = {
+        ...data.generalInfo,
+        schoolName: payload.school_name,
+        affiliationNo: payload.affiliation_number,
+        schoolCode: payload.school_code,
+        pinCode: payload.pin_code,
+        address: payload.address,
+        principalName: payload.principal_name,
+        principalQualification: payload.principal_qualification,
+        email: payload.official_email,
+        phone: payload.official_phone,
+        principalMessage: payload.principal_message
+      };
+      SchoolData.save(data);
+      showToast("General School Information updated!", "success");
+    });
+
+    // 3. MANDATORY DISCLOSURE DOCUMENTS
+    let cachedDocs = [];
+    async function renderDisclosureDocs() {
+      const container = document.getElementById("adm-doc-list");
+      if (!container) return;
+
+      try {
+        const res = await fetch("/api/admin/disclosure-documents", { headers: getAuthHeaders() });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data)) {
+            cachedDocs = json.data;
+          }
+        }
+      } catch {}
+
+      if (cachedDocs.length === 0) {
+        cachedDocs = SchoolData.get().disclosureDocuments;
+      }
+
+      container.innerHTML = cachedDocs.map((doc, idx) => `
+        <div class="card" style="margin-bottom: 1.25rem; padding: 1.5rem; border-left: 4px solid var(--accent);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
+            <div style="flex: 1;">
+              <span class="badge badge-cbse" style="margin-bottom: 0.35rem;">${doc.category}</span>
+              <h4 style="color: var(--primary); font-size: 1.1rem;">${doc.document_name || doc.name}</h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">${doc.description || ""}</p>
+              <div style="font-size: 0.85rem; margin-top: 0.75rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                <div><strong>Status:</strong> <span class="badge ${(doc.status_code === 'available' || doc.statusCode === 'verified' || doc.file_url || doc.fileUrl) ? 'badge-verified' : 'badge-pending'}">${doc.status}</span></div>
+                <div><strong>Issue:</strong> ${doc.issue_date || doc.issueDate || "[OFFICIAL ISSUE DATE]"}</div>
+                <div><strong>Validity:</strong> ${doc.validity_date || doc.validityDate || "[OFFICIAL VALIDITY PERIOD]"}</div>
+                ${(doc.file_url || doc.fileUrl) ? `<div><strong>File:</strong> <a href="${doc.file_url || doc.fileUrl}" target="_blank" style="color: var(--accent-dark); font-weight: 700;">View PDF ↗</a></div>` : ''}
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="editDoc(${idx})"><span>✏️</span> Upload / Edit Document</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    window.editDoc = function(index) {
+      const doc = cachedDocs[index];
+      const modal = document.getElementById("admin-modal");
+      const modalBody = document.getElementById("admin-modal-body");
+      document.getElementById("admin-modal-title").textContent = `Upload / Update: ${doc.document_name || doc.name}`;
+
+      modalBody.innerHTML = `
+        <div class="safety-alert-box" style="margin-top: 0;">
+          <strong>Official Compliance Note:</strong> "Please verify that this document is an official certificate issued to or applicable to Saraswati Shishu Vidya Mandir."
+        </div>
+        <form id="form-edit-doc">
+          <div class="form-group">
+            <label class="form-label">Upload Official PDF / Certificate</label>
+            <input type="file" id="edit-doc-file" class="form-control" accept=".pdf,.jpg,.jpeg,.png,.webp">
+            <p class="form-helper">Allowed formats: PDF, JPG, PNG (Max 10MB)</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Document Status</label>
+            <select id="edit-doc-status-code" class="form-control">
+              <option value="pending" ${(doc.status_code === 'pending' || doc.statusCode === 'pending') ? 'selected' : ''}>Pending Upload / Under Verification</option>
+              <option value="available" ${(doc.status_code === 'available' || doc.statusCode === 'verified' || doc.file_url || doc.fileUrl) ? 'selected' : ''}>Available & Verified Official Copy</option>
+              <option value="expired" ${(doc.status_code === 'expired' || doc.statusCode === 'expired') ? 'selected' : ''}>Expired / Renewal Required</option>
+            </select>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Issue Date</label>
+              <input type="text" id="edit-doc-issue" class="form-control" value="${doc.issue_date || doc.issueDate || '[OFFICIAL ISSUE DATE]'}">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Validity Period</label>
+              <input type="text" id="edit-doc-validity" class="form-control" value="${doc.validity_date || doc.validityDate || '[OFFICIAL VALIDITY PERIOD]'}">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-accent btn-sm" style="width: 100%;">Save Document Details</button>
+        </form>
+      `;
+
+      document.getElementById("form-edit-doc").onsubmit = async (e) => {
+        e.preventDefault();
+        const fileInput = document.getElementById("edit-doc-file");
+        let fileUrl = doc.file_url || doc.fileUrl || null;
+        let fileSize = doc.file_size || doc.fileSize || "1.2 MB";
+
+        if (fileInput.files.length > 0) {
+          const formData = new FormData();
+          formData.append("file", fileInput.files[0]);
+          try {
+            const upRes = await fetch("/api/upload/school-documents", {
+              method: "POST",
+              headers: { "Authorization": `Bearer ${currentAuthToken}` },
+              body: formData
+            });
+            const upJson = await upRes.json();
+            if (upJson.success && upJson.data) {
+              fileUrl = upJson.data.file_url;
+              fileSize = upJson.data.file_size;
+              showToast("Official file uploaded to server successfully!", "success");
+            }
+          } catch (uploadErr) {
+            console.warn("Upload failed, using local blob.", uploadErr);
+          }
+        }
+
+        const statusCode = document.getElementById("edit-doc-status-code").value;
+        const statusText = statusCode === "available" || statusCode === "verified"
+          ? "Available (Verified Official Document)" 
+          : (statusCode === "expired" ? "Expired / Renewal Pending" : "Official document to be uploaded by Saraswati Shishu Vidya Mandir.");
+        const issueDate = document.getElementById("edit-doc-issue").value.trim();
+        const validityDate = document.getElementById("edit-doc-validity").value.trim();
+
+        // Update Backend
+        if (doc.id) {
+          try {
+            await fetch(`/api/admin/disclosure-documents/${doc.id}`, {
+              method: "PUT",
+              headers: getAuthHeaders(),
+              body: JSON.stringify({
+                category: doc.category,
+                document_name: doc.document_name || doc.name,
+                description: doc.description || "",
+                status: statusText,
+                status_code: statusCode,
+                issue_date: issueDate,
+                validity_date: validityDate,
+                file_url: fileUrl,
+                file_size: fileSize,
+                file_type: "PDF",
+                published: true
+              })
+            });
+          } catch {}
+        }
+
+        // Update local memory and store
+        doc.status_code = statusCode;
+        doc.statusCode = statusCode;
+        doc.status = statusText;
+        doc.issue_date = issueDate;
+        doc.issueDate = issueDate;
+        doc.validity_date = validityDate;
+        doc.validityDate = validityDate;
+        doc.file_url = fileUrl;
+        doc.fileUrl = fileUrl;
+        doc.last_updated = new Date().toISOString().split("T")[0];
+
+        const localData = SchoolData.get();
+        localData.disclosureDocuments = cachedDocs;
+        SchoolData.save(localData);
+
+        renderDisclosureDocs();
+        loadDashboardStats();
+        modal.classList.remove("active");
+        showToast("Mandatory Disclosure Document saved!", "success");
+      };
+
+      modal.classList.add("active");
+    };
+
+    // 4. FACULTY & STAFF
+    let cachedStaff = [];
+    async function renderFaculty() {
+      const container = document.getElementById("adm-faculty-list");
+      if (!container) return;
+
+      try {
+        const res = await fetch("/api/admin/staff", { headers: getAuthHeaders() });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data)) {
+            cachedStaff = json.data;
+          }
+        }
+      } catch {}
+
+      if (cachedStaff.length === 0) {
+        cachedStaff = SchoolData.get().facultyList;
+      }
+
+      container.innerHTML = cachedStaff.map((f, idx) => `
+        <div class="card" style="margin-bottom: 0.75rem; padding: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+          <div>
+            <strong>${f.name}</strong> (${f.designation}) — <span style="color: var(--accent-dark); font-weight: 600;">${f.subject || ''}</span>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Qualification: ${f.qualification || ''} | Department: ${f.department || f.bio || 'Secondary Wing'}</div>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-outline btn-sm" onclick="editTeacher(${idx})">Edit</button>
+            <button class="btn btn-outline btn-sm" style="color: var(--danger);" onclick="deleteTeacher(${idx})">Delete</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    window.editTeacher = function(idx) {
+      const f = cachedStaff[idx];
+      const modal = document.getElementById("admin-modal");
+      const modalBody = document.getElementById("admin-modal-body");
+      document.getElementById("admin-modal-title").textContent = "Edit Teacher Details";
+
+      modalBody.innerHTML = `
+        <form id="form-edit-teacher">
+          <div class="form-group">
+            <label class="form-label">Teacher Full Name *</label>
+            <input type="text" id="teach-name" class="form-control" value="${f.name}" required>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Designation *</label>
+              <input type="text" id="teach-desig" class="form-control" value="${f.designation}" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Subject Taught *</label>
+              <input type="text" id="teach-subject" class="form-control" value="${f.subject || ''}" required>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Qualification *</label>
+              <input type="text" id="teach-qual" class="form-control" value="${f.qualification || ''}" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Experience</label>
+              <input type="text" id="teach-exp" class="form-control" value="${f.experience || '[OFFICIAL EXPERIENCE]'}">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-accent btn-sm" style="width: 100%;">Update Teacher Record</button>
+        </form>
+      `;
+
+      document.getElementById("form-edit-teacher").onsubmit = async (e) => {
+        e.preventDefault();
+        const payload = {
+          name: document.getElementById("teach-name").value.trim(),
+          designation: document.getElementById("teach-desig").value.trim(),
+          subject: document.getElementById("teach-subject").value.trim(),
+          qualification: document.getElementById("teach-qual").value.trim(),
+          experience: document.getElementById("teach-exp").value.trim(),
+          staff_type: f.staff_type || "Teaching Staff",
+          is_published: true
+        };
+
+        if (f.id) {
+          try {
+            await fetch(`/api/admin/staff/${f.id}`, {
+              method: "PUT",
+              headers: getAuthHeaders(),
+              body: JSON.stringify(payload)
+            });
+          } catch {}
+        }
+
+        Object.assign(f, payload);
+        const data = SchoolData.get();
+        data.facultyList = cachedStaff;
+        SchoolData.save(data);
+
+        renderFaculty();
+        loadDashboardStats();
+        modal.classList.remove("active");
+        showToast("Teacher record updated.", "success");
+      };
+
+      modal.classList.add("active");
+    };
+
+    window.deleteTeacher = async function(idx) {
+      if (confirm("Are you sure you want to remove this teacher record?")) {
+        const f = cachedStaff[idx];
+        if (f.id) {
+          try {
+            await fetch(`/api/admin/staff/${f.id}`, {
+              method: "DELETE",
+              headers: getAuthHeaders()
+            });
+          } catch {}
+        }
+        cachedStaff.splice(idx, 1);
+        const data = SchoolData.get();
+        data.facultyList = cachedStaff;
+        SchoolData.save(data);
+        renderFaculty();
+        loadDashboardStats();
+        showToast("Teacher removed.", "info");
+      }
+    };
+
+    document.getElementById("btn-add-teacher")?.addEventListener("click", () => {
+      const modal = document.getElementById("admin-modal");
+      const modalBody = document.getElementById("admin-modal-body");
+      document.getElementById("admin-modal-title").textContent = "Add New Teacher";
+
+      modalBody.innerHTML = `
+        <form id="form-add-teacher">
+          <div class="form-group">
+            <label class="form-label">Teacher Full Name *</label>
+            <input type="text" id="new-teach-name" class="form-control" placeholder="e.g. [TEACHER NAME]" required>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Designation *</label>
+              <input type="text" id="new-teach-desig" class="form-control" placeholder="e.g. TGT Mathematics" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Subject Taught *</label>
+              <input type="text" id="new-teach-subject" class="form-control" placeholder="e.g. Mathematics" required>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Qualification *</label>
+              <input type="text" id="new-teach-qual" class="form-control" placeholder="e.g. [QUALIFICATION]" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Experience</label>
+              <input type="text" id="new-teach-exp" class="form-control" placeholder="e.g. [OFFICIAL EXPERIENCE]">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-accent btn-sm" style="width: 100%;">Create Teacher Record</button>
+        </form>
+      `;
+
+      document.getElementById("form-add-teacher").onsubmit = async (e) => {
+        e.preventDefault();
+        const payload = {
+          name: document.getElementById("new-teach-name").value.trim(),
+          designation: document.getElementById("new-teach-desig").value.trim(),
+          subject: document.getElementById("new-teach-subject").value.trim(),
+          qualification: document.getElementById("new-teach-qual").value.trim(),
+          experience: document.getElementById("new-teach-exp").value.trim() || "[OFFICIAL EXPERIENCE]",
+          staff_type: "Teaching Staff",
+          is_published: true
+        };
+
+        try {
+          const res = await fetch("/api/admin/staff", {
+            method: "POST",
+            headers: getAuthHeaders(),
+            body: JSON.stringify(payload)
+          });
+          const json = await res.json();
+          if (json.success && json.data) {
+            cachedStaff.push(json.data);
+          }
+        } catch {
+          cachedStaff.push({ id: "fac-" + Date.now(), ...payload });
+        }
+
+        const data = SchoolData.get();
+        data.facultyList = cachedStaff;
+        SchoolData.save(data);
+
+        renderFaculty();
+        loadDashboardStats();
+        modal.classList.remove("active");
+        showToast("New teacher added successfully!", "success");
+      };
+
+      modal.classList.add("active");
+    });
+
+    // 5. NOTICES
+    let cachedNotices = [];
+    async function renderNotices() {
+      const container = document.getElementById("adm-notices-list");
+      if (!container) return;
+
+      try {
+        const res = await fetch("/api/admin/notices", { headers: getAuthHeaders() });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data)) {
+            cachedNotices = json.data;
+          }
+        }
+      } catch {}
+
+      if (cachedNotices.length === 0) {
+        cachedNotices = SchoolData.get().notices;
+      }
+
+      container.innerHTML = cachedNotices.map((n, idx) => `
+        <div class="card" style="margin-bottom: 0.75rem; padding: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+          <div>
+            <strong>${n.title}</strong>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">${n.notice_date || n.date} | Category: <span class="badge badge-cbse">${n.category}</span></div>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-outline btn-sm" style="color: var(--danger);" onclick="deleteNotice(${idx})">Delete</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    window.deleteNotice = async function(idx) {
+      if (confirm("Delete this notice?")) {
+        const n = cachedNotices[idx];
+        if (n.id) {
+          try {
+            await fetch(`/api/admin/notices/${n.id}`, {
+              method: "DELETE",
+              headers: getAuthHeaders()
+            });
+          } catch {}
+        }
+        cachedNotices.splice(idx, 1);
+        const data = SchoolData.get();
+        data.notices = cachedNotices;
+        SchoolData.save(data);
+        renderNotices();
+        loadDashboardStats();
+        showToast("Notice removed.", "info");
+      }
+    };
+
+    document.getElementById("btn-add-notice")?.addEventListener("click", () => {
+      const modal = document.getElementById("admin-modal");
+      const modalBody = document.getElementById("admin-modal-body");
+      document.getElementById("admin-modal-title").textContent = "Post New Notice";
+
+      modalBody.innerHTML = `
+        <form id="form-new-notice">
+          <div class="form-group">
+            <label class="form-label">Notice Title *</label>
+            <input type="text" id="n-title" class="form-control" placeholder="Enter notice headline" required>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select id="n-cat" class="form-control" required>
+                <option value="General">General</option>
+                <option value="Academic">Academic</option>
+                <option value="Examination">Examination</option>
+                <option value="Admission">Admission</option>
+                <option value="Holiday">Holiday</option>
+                <option value="Events">Events</option>
+                <option value="CBSE">CBSE Circular</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Notice Date *</label>
+              <input type="date" id="n-date" class="form-control" value="${new Date().toISOString().split("T")[0]}" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description / Body *</label>
+            <textarea id="n-desc" class="form-control" placeholder="Notice details..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-accent btn-sm" style="width: 100%;">Publish Notice</button>
+        </form>
+      `;
+
+      document.getElementById("form-new-notice").onsubmit = async (e) => {
+        e.preventDefault();
+        const payload = {
+          title: document.getElementById("n-title").value.trim(),
+          category: document.getElementById("n-cat").value,
+          notice_date: document.getElementById("n-date").value,
+          description: document.getElementById("n-desc").value.trim(),
+          is_important: false,
+          published: true
+        };
+
+        try {
+          const res = await fetch("/api/admin/notices", {
+            method: "POST",
+            headers: getAuthHeaders(),
+            body: JSON.stringify(payload)
+          });
+          const json = await res.json();
+          if (json.success && json.data) {
+            cachedNotices.unshift(json.data);
+          }
+        } catch {
+          cachedNotices.unshift({ id: "not-" + Date.now(), ...payload });
+        }
+
+        const data = SchoolData.get();
+        data.notices = cachedNotices;
+        SchoolData.save(data);
+
+        renderNotices();
+        loadDashboardStats();
+        modal.classList.remove("active");
+        showToast("New Notice Published!", "success");
+      };
+
+      modal.classList.add("active");
+    });
+
+    // 6. FEES
+    let cachedFees = [];
+    async function renderFees() {
+      const container = document.getElementById("adm-fees-container");
+      if (!container) return;
+
+      try {
+        const res = await fetch("/api/admin/fees", { headers: getAuthHeaders() });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+            cachedFees = json.data;
+          }
+        }
+      } catch {}
+
+      if (cachedFees.length === 0) {
+        cachedFees = SchoolData.get().feeStructure;
+      }
+
+      container.innerHTML = cachedFees.map((f, idx) => `
+        <div class="card" style="margin-bottom: 1.25rem; padding: 1.25rem;">
+          <h4 style="color: var(--primary); margin-bottom: 0.75rem;">${f.class_group || f.classGroup}</h4>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Admission Fee</label>
+              <input type="text" class="form-control" value="${f.admission_fee || f.admissionFee}" id="fee-adm-${idx}">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tuition Fee</label>
+              <input type="text" class="form-control" value="${f.tuition_fee || f.tuitionFee}" id="fee-tui-${idx}">
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Annual Charges</label>
+              <input type="text" class="form-control" value="${f.annual_charges || f.annualCharges}" id="fee-ann-${idx}">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Other Charges</label>
+              <input type="text" class="form-control" value="${f.other_charges || f.otherCharges}" id="fee-oth-${idx}">
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    document.getElementById("form-fee-structure")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      cachedFees.forEach((f, idx) => {
+        const adm = document.getElementById(`fee-adm-${idx}`).value;
+        const tui = document.getElementById(`fee-tui-${idx}`).value;
+        const ann = document.getElementById(`fee-ann-${idx}`).value;
+        const oth = document.getElementById(`fee-oth-${idx}`).value;
+        f.admission_fee = adm;
+        f.admissionFee = adm;
+        f.tuition_fee = tui;
+        f.tuitionFee = tui;
+        f.annual_charges = ann;
+        f.annualCharges = ann;
+        f.other_charges = oth;
+        f.otherCharges = oth;
+      });
+
+      try {
+        await fetch("/api/admin/fees", {
+          method: "PUT",
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ fees: cachedFees })
+        });
+      } catch {}
+
+      const data = SchoolData.get();
+      data.feeStructure = cachedFees;
+      SchoolData.save(data);
+      showToast("Fee Schedule updated successfully!", "success");
+    });
+
+    // 7. ACADEMIC CALENDAR
+    let cachedCalendar = [];
+    async function renderCalendar() {
+      const container = document.getElementById("adm-events-list");
+      if (!container) return;
+
+      try {
+        const res = await fetch("/api/admin/calendar", { headers: getAuthHeaders() });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data)) {
+            cachedCalendar = json.data;
+          }
+        }
+      } catch {}
+
+      if (cachedCalendar.length === 0) {
+        cachedCalendar = SchoolData.get().academicEvents || [];
+      }
+
+      container.innerHTML = cachedCalendar.map((ev, idx) => `
+        <div class="card" style="margin-bottom: 0.75rem; padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <strong>${ev.title}</strong>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">${ev.start_date || ev.date} | Category: <span class="badge badge-cbse">${ev.event_type || ev.category}</span></div>
+          </div>
+          <button class="btn btn-outline btn-sm" style="color: var(--danger);" onclick="deleteCalendarEvent(${idx})">Delete</button>
+        </div>
+      `).join("");
+    }
+
+    window.deleteCalendarEvent = async function(idx) {
+      if (confirm("Delete this calendar event?")) {
+        const ev = cachedCalendar[idx];
+        if (ev.id) {
+          try {
+            await fetch(`/api/admin/calendar/${ev.id}`, {
+              method: "DELETE",
+              headers: getAuthHeaders()
+            });
+          } catch {}
+        }
+        cachedCalendar.splice(idx, 1);
+        const data = SchoolData.get();
+        data.academicEvents = cachedCalendar;
+        SchoolData.save(data);
+        renderCalendar();
+        showToast("Calendar event removed.", "info");
+      }
+    };
+
+    document.getElementById("btn-add-event")?.addEventListener("click", () => {
+      const modal = document.getElementById("admin-modal");
+      const modalBody = document.getElementById("admin-modal-body");
+      document.getElementById("admin-modal-title").textContent = "Add Academic Calendar Event";
+
+      modalBody.innerHTML = `
+        <form id="form-add-event">
+          <div class="form-group">
+            <label class="form-label">Event Title *</label>
+            <input type="text" id="ev-title" class="form-control" placeholder="e.g. Annual Sports Meet" required>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Event Type *</label>
+              <select id="ev-type" class="form-control" required>
+                <option value="Academic">Academic</option>
+                <option value="Examination">Examination</option>
+                <option value="Holiday">Holiday</option>
+                <option value="Events">Events / Cultural</option>
+                <option value="Celebration">Celebration</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Start Date *</label>
+              <input type="date" id="ev-date" class="form-control" value="${new Date().toISOString().split("T")[0]}" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-accent btn-sm" style="width: 100%;">Add Event to Calendar</button>
+        </form>
+      `;
+
+      document.getElementById("form-add-event").onsubmit = async (e) => {
+        e.preventDefault();
+        const payload = {
+          title: document.getElementById("ev-title").value.trim(),
+          event_type: document.getElementById("ev-type").value,
+          start_date: document.getElementById("ev-date").value,
+          academic_session: "2026-2027",
+          published: true
+        };
+
+        try {
+          const res = await fetch("/api/admin/calendar", {
+            method: "POST",
+            headers: getAuthHeaders(),
+            body: JSON.stringify(payload)
+          });
+          const json = await res.json();
+          if (json.success && json.data) {
+            cachedCalendar.push(json.data);
+          }
+        } catch {
+          cachedCalendar.push({ id: "cal-" + Date.now(), ...payload });
+        }
+
+        const data = SchoolData.get();
+        data.academicEvents = cachedCalendar;
+        SchoolData.save(data);
+
+        renderCalendar();
+        modal.classList.remove("active");
+        showToast("Calendar event added!", "success");
+      };
+
+      modal.classList.add("active");
+    });
+
+    // 8. ADMISSION ENQUIRIES
+    async function renderEnquiries() {
+      const container = document.getElementById("adm-enquiries-list");
+      if (!container) return;
+
+      try {
+        const res = await fetch("/api/admin/admissions/enquiries", { headers: getAuthHeaders() });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data && json.data.length > 0) {
+            container.innerHTML = json.data.map(enq => `
+              <div class="card" style="margin-bottom: 1rem; padding: 1.25rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+                  <div>
+                    <span class="badge badge-cbse">${enq.ref_number}</span>
+                    <h4 style="color: var(--primary); margin: 0.35rem 0;">${enq.student_name} (${enq.class_applying_for})</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">Parent: <strong>${enq.parent_guardian_name}</strong> | Phone: <strong>${enq.phone}</strong> ${enq.email ? `| Email: ${enq.email}` : ''}</p>
+                    ${enq.message ? `<p style="font-size: 0.85rem; color: var(--text-main);"><em>"${enq.message}"</em></p>` : ''}
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Received: ${new Date(enq.created_at).toLocaleString()}</div>
+                  </div>
+                  <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <select class="form-control" style="font-size: 0.8rem; padding: 0.3rem 0.5rem;" onchange="updateEnquiryStatus('${enq.id}', this.value)">
+                      <option value="New" ${enq.status === 'New' ? 'selected' : ''}>New</option>
+                      <option value="Contacted" ${enq.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
+                      <option value="Admitted" ${enq.status === 'Admitted' ? 'selected' : ''}>Admitted</option>
+                      <option value="Closed" ${enq.status === 'Closed' ? 'selected' : ''}>Closed</option>
+                    </select>
+                    <button class="btn btn-outline btn-sm" style="color: var(--danger);" onclick="deleteEnquiry('${enq.id}')">🗑️</button>
+                  </div>
+                </div>
+              </div>
+            `).join("");
+            return;
+          }
+        }
+      } catch {}
+      container.innerHTML = `<p style="color: var(--text-muted); padding: 1rem;">No admission enquiries recorded yet.</p>`;
+    }
+
+    window.updateEnquiryStatus = async function(id, status) {
+      try {
+        const res = await fetch(`/api/admin/admissions/enquiries/${id}/status`, {
+          method: "PATCH",
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ status })
+        });
+        if (res.ok) {
+          showToast(`Enquiry marked as ${status}`, "success");
+          loadDashboardStats();
+        }
+      } catch {}
+    };
+
+    window.deleteEnquiry = async function(id) {
+      if (confirm("Delete this admission enquiry?")) {
+        try {
+          await fetch(`/api/admin/admissions/enquiries/${id}`, {
+            method: "DELETE",
+            headers: getAuthHeaders()
+          });
+          renderEnquiries();
+          loadDashboardStats();
+          showToast("Enquiry deleted.", "info");
+        } catch {}
+      }
+    };
+
+    // 9. CONTACT MESSAGES
+    async function renderContacts() {
+      const container = document.getElementById("adm-contacts-list");
+      if (!container) return;
+
+      try {
+        const res = await fetch("/api/admin/contact/enquiries", { headers: getAuthHeaders() });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data && json.data.length > 0) {
+            container.innerHTML = json.data.map(c => `
+              <div class="card" style="margin-bottom: 1rem; padding: 1.25rem;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+                  <div>
+                    <h4 style="color: var(--primary); margin: 0 0 0.25rem 0;">${c.subject}</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">From: <strong>${c.name}</strong> (${c.email}) ${c.phone ? `| Phone: ${c.phone}` : ''}</p>
+                    <p style="font-size: 0.9rem; color: var(--text-main); margin-top: 0.5rem;">${c.message}</p>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Received: ${new Date(c.created_at).toLocaleString()}</div>
+                  </div>
+                  <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <select class="form-control" style="font-size: 0.8rem; padding: 0.3rem 0.5rem;" onchange="updateContactStatus('${c.id}', this.value)">
+                      <option value="New" ${c.status === 'New' ? 'selected' : ''}>New</option>
+                      <option value="Read" ${c.status === 'Read' ? 'selected' : ''}>Read</option>
+                      <option value="Replied" ${c.status === 'Replied' ? 'selected' : ''}>Replied</option>
+                      <option value="Closed" ${c.status === 'Closed' ? 'selected' : ''}>Closed</option>
+                    </select>
+                    <button class="btn btn-outline btn-sm" style="color: var(--danger);" onclick="deleteContactMsg('${c.id}')">🗑️</button>
+                  </div>
+                </div>
+              </div>
+            `).join("");
+            return;
+          }
+        }
+      } catch {}
+      container.innerHTML = `<p style="color: var(--text-muted); padding: 1rem;">No contact messages received yet.</p>`;
+    }
+
+    window.updateContactStatus = async function(id, status) {
+      try {
+        const res = await fetch(`/api/admin/contact/enquiries/${id}/status`, {
+          method: "PATCH",
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ status })
+        });
+        if (res.ok) {
+          showToast(`Message status updated to ${status}`, "success");
+          loadDashboardStats();
+        }
+      } catch {}
+    };
+
+    window.deleteContactMsg = async function(id) {
+      if (confirm("Delete this contact message?")) {
+        try {
+          await fetch(`/api/admin/contact/enquiries/${id}`, {
+            method: "DELETE",
+            headers: getAuthHeaders()
+          });
+          renderContacts();
+          loadDashboardStats();
+          showToast("Message deleted.", "info");
+        } catch {}
+      }
+    };
+
+    // 10. SCHOOL MANAGING COMMITTEE (SMC)
+    let cachedSMC = [];
+    async function renderSMC() {
+      const container = document.getElementById("adm-smc-list");
+      if (!container) return;
+
+      try {
+        const res = await fetch("/api/admin/smc", { headers: getAuthHeaders() });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data)) {
+            cachedSMC = json.data;
+          }
+        }
+      } catch {}
+
+      if (cachedSMC.length === 0) {
+        cachedSMC = SchoolData.get().smcMembers || [];
+      }
+
+      container.innerHTML = cachedSMC.map((m, idx) => `
+        <div class="card" style="margin-bottom: 0.75rem; padding: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <div>
+            <strong>${m.name}</strong> — <span class="badge badge-cbse">${m.designation}</span>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">Representation: ${m.representation}</div>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-outline btn-sm" onclick="editSMC(${idx})">Edit</button>
+            <button class="btn btn-outline btn-sm" style="color: var(--danger);" onclick="deleteSMC(${idx})">Delete</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    window.editSMC = function(idx) {
+      const m = cachedSMC[idx];
+      const modal = document.getElementById("admin-modal");
+      const modalBody = document.getElementById("admin-modal-body");
+      document.getElementById("admin-modal-title").textContent = "Edit SMC Member";
+
+      modalBody.innerHTML = `
+        <form id="form-edit-smc">
+          <div class="form-group">
+            <label class="form-label">Member Name *</label>
+            <input type="text" id="smc-name" class="form-control" value="${m.name}" required>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Designation *</label>
+              <input type="text" id="smc-desig" class="form-control" value="${m.designation}" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Representation *</label>
+              <input type="text" id="smc-rep" class="form-control" value="${m.representation}" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-accent btn-sm" style="width: 100%;">Save SMC Details</button>
+        </form>
+      `;
+
+      document.getElementById("form-edit-smc").onsubmit = async (e) => {
+        e.preventDefault();
+        const payload = {
+          name: document.getElementById("smc-name").value.trim(),
+          designation: document.getElementById("smc-desig").value.trim(),
+          representation: document.getElementById("smc-rep").value.trim(),
+          published: true
+        };
+
+        if (m.id) {
+          try {
+            await fetch(`/api/admin/smc/${m.id}`, {
+              method: "PUT",
+              headers: getAuthHeaders(),
+              body: JSON.stringify(payload)
+            });
+          } catch {}
+        }
+
+        Object.assign(m, payload);
+        const data = SchoolData.get();
+        data.smcMembers = cachedSMC;
+        SchoolData.save(data);
+
+        renderSMC();
+        modal.classList.remove("active");
+        showToast("SMC Member updated!", "success");
+      };
+
+      modal.classList.add("active");
+    };
+
+    window.deleteSMC = async function(idx) {
+      if (confirm("Remove this member from SMC?")) {
+        const m = cachedSMC[idx];
+        if (m.id) {
+          try {
+            await fetch(`/api/admin/smc/${m.id}`, {
+              method: "DELETE",
+              headers: getAuthHeaders()
+            });
+          } catch {}
+        }
+        cachedSMC.splice(idx, 1);
+        const data = SchoolData.get();
+        data.smcMembers = cachedSMC;
+        SchoolData.save(data);
+        renderSMC();
+        showToast("SMC Member removed.", "info");
+      }
+    };
+
+    document.getElementById("btn-add-smc")?.addEventListener("click", () => {
+      const modal = document.getElementById("admin-modal");
+      const modalBody = document.getElementById("admin-modal-body");
+      document.getElementById("admin-modal-title").textContent = "Add SMC Committee Member";
+
+      modalBody.innerHTML = `
+        <form id="form-add-smc">
+          <div class="form-group">
+            <label class="form-label">Member Name *</label>
+            <input type="text" id="add-smc-name" class="form-control" placeholder="e.g. [OFFICIAL NAME]" required>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Designation *</label>
+              <input type="text" id="add-smc-desig" class="form-control" placeholder="e.g. Member / President" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Representation *</label>
+              <input type="text" id="add-smc-rep" class="form-control" placeholder="e.g. Parent Representative" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-accent btn-sm" style="width: 100%;">Add to Committee</button>
+        </form>
+      `;
+
+      document.getElementById("form-add-smc").onsubmit = async (e) => {
+        e.preventDefault();
+        const payload = {
+          name: document.getElementById("add-smc-name").value.trim(),
+          designation: document.getElementById("add-smc-desig").value.trim(),
+          representation: document.getElementById("add-smc-rep").value.trim(),
+          published: true
+        };
+
+        try {
+          const res = await fetch("/api/admin/smc", {
+            method: "POST",
+            headers: getAuthHeaders(),
+            body: JSON.stringify(payload)
+          });
+          const json = await res.json();
+          if (json.success && json.data) {
+            cachedSMC.push(json.data);
+          }
+        } catch {
+          cachedSMC.push({ id: "smc-" + Date.now(), ...payload });
+        }
+
+        const data = SchoolData.get();
+        data.smcMembers = cachedSMC;
+        SchoolData.save(data);
+
+        renderSMC();
+        modal.classList.remove("active");
+        showToast("SMC Member added!", "success");
+      };
+
+      modal.classList.add("active");
+    });
+
+    // 11. TRANSFER CERTIFICATES (TC)
+    let cachedTCs = [];
+    async function renderTC() {
+      const container = document.getElementById("adm-tc-list");
+      if (!container) return;
+
+      try {
+        const res = await fetch("/api/admin/transfer-certificates", { headers: getAuthHeaders() });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && Array.isArray(json.data)) {
+            cachedTCs = json.data;
+          }
+        }
+      } catch {}
+
+      if (cachedTCs.length === 0) {
+        cachedTCs = SchoolData.get().transferCertificates || [];
+      }
+
+      container.innerHTML = cachedTCs.map((tc, idx) => `
+        <div class="card" style="margin-bottom: 0.75rem; padding: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+          <div>
+            <strong>${tc.tc_number || tc.tcNumber}</strong> — ${tc.student_name || tc.studentName} (${tc.class_left || tc.classLeft})
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Adm No: <strong>${tc.admission_number || tc.admissionNumber}</strong> | Issued: ${tc.issue_date || tc.issueDate} | Status: <span class="badge badge-verified">${tc.verification_status || tc.status || 'Verified & Issued'}</span></div>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            ${(tc.file_url || tc.fileUrl) ? `<a href="${tc.file_url || tc.fileUrl}" target="_blank" class="btn btn-outline btn-sm">PDF ↗</a>` : ''}
+            <button class="btn btn-outline btn-sm" style="color: var(--danger);" onclick="deleteTC(${idx})">Delete</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    window.deleteTC = async function(idx) {
+      if (confirm("Delete this Transfer Certificate record?")) {
+        const tc = cachedTCs[idx];
+        if (tc.id) {
+          try {
+            await fetch(`/api/admin/transfer-certificates/${tc.id}`, {
+              method: "DELETE",
+              headers: getAuthHeaders()
+            });
+          } catch {}
+        }
+        cachedTCs.splice(idx, 1);
+        const data = SchoolData.get();
+        data.transferCertificates = cachedTCs;
+        SchoolData.save(data);
+        renderTC();
+        showToast("TC Record deleted.", "info");
+      }
+    };
+
+    document.getElementById("btn-add-tc")?.addEventListener("click", () => {
+      const modal = document.getElementById("admin-modal");
+      const modalBody = document.getElementById("admin-modal-body");
+      document.getElementById("admin-modal-title").textContent = "Issue Transfer Certificate Record";
+
+      modalBody.innerHTML = `
+        <form id="form-issue-tc">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">TC Serial Number *</label>
+              <input type="text" id="tc-num" class="form-control" value="SSVM/TC/2026/00${cachedTCs.length + 1}" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Admission Number *</label>
+              <input type="text" id="tc-adm" class="form-control" placeholder="e.g. ADM-2023-501" required>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Student Particulars (Initials) *</label>
+              <input type="text" id="tc-sname" class="form-control" value="[STUDENT NAME / INITIALS]" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Class Left *</label>
+              <input type="text" id="tc-class" class="form-control" placeholder="e.g. Class 10" required>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Date of Issue *</label>
+              <input type="date" id="tc-date" class="form-control" value="${new Date().toISOString().split("T")[0]}" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Reason for Leaving *</label>
+              <input type="text" id="tc-reason" class="form-control" value="Passed CBSE AISSE Class X" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Upload Scanned TC (PDF / Image)</label>
+            <input type="file" id="tc-file" class="form-control" accept=".pdf,.jpg,.png">
+          </div>
+          <button type="submit" class="btn btn-accent btn-sm" style="width: 100%;">Record & Issue TC</button>
+        </form>
+      `;
+
+      document.getElementById("form-issue-tc").onsubmit = async (e) => {
+        e.preventDefault();
+        const fileInput = document.getElementById("tc-file");
+        let fileUrl = null;
+
+        if (fileInput.files.length > 0) {
+          const formData = new FormData();
+          formData.append("file", fileInput.files[0]);
+          try {
+            const upRes = await fetch("/api/upload/transfer-certificates", {
+              method: "POST",
+              headers: { "Authorization": `Bearer ${currentAuthToken}` },
+              body: formData
+            });
+            const upJson = await upRes.json();
+            if (upJson.success && upJson.data) {
+              fileUrl = upJson.data.file_url;
+            }
+          } catch {}
+        }
+
+        const payload = {
+          tc_number: document.getElementById("tc-num").value.trim(),
+          admission_number: document.getElementById("tc-adm").value.trim(),
+          student_name: document.getElementById("tc-sname").value.trim(),
+          class_left: document.getElementById("tc-class").value.trim(),
+          issue_date: document.getElementById("tc-date").value,
+          reason_for_leaving: document.getElementById("tc-reason").value.trim(),
+          verification_status: "Verified & Issued",
+          file_url: fileUrl,
+          published: true
+        };
+
+        try {
+          const res = await fetch("/api/admin/transfer-certificates", {
+            method: "POST",
+            headers: getAuthHeaders(),
+            body: JSON.stringify(payload)
+          });
+          const json = await res.json();
+          if (json.success && json.data) {
+            cachedTCs.unshift(json.data);
+          }
+        } catch {
+          cachedTCs.unshift({ id: "tc-" + Date.now(), ...payload });
+        }
+
+        const data = SchoolData.get();
+        data.transferCertificates = cachedTCs;
+        SchoolData.save(data);
+
+        renderTC();
+        modal.classList.remove("active");
+        showToast("Transfer Certificate record saved!", "success");
+      };
+
+      modal.classList.add("active");
+    });
+
+    // 12. SECURITY AUDIT LOGS
+    async function renderAuditLogs() {
+      const container = document.getElementById("adm-audit-list");
+      if (!container) return;
+      try {
+        const res = await fetch("/api/admin/audit-logs", { headers: getAuthHeaders() });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success && json.data && json.data.length > 0) {
+            container.innerHTML = json.data.slice(0, 20).map(l => `
+              <div class="card" style="margin-bottom: 0.5rem; padding: 0.75rem; font-size: 0.85rem; border-left: 3px solid var(--accent);">
+                <div style="display: flex; justify-content: space-between;">
+                  <strong style="color: var(--primary);">${l.action} (${l.entity_type})</strong>
+                  <span style="color: var(--text-muted); font-size: 0.8rem;">${new Date(l.created_at).toLocaleString()}</span>
+                </div>
+                <div style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.2rem;">User: <strong>${l.admin_user_email || 'System'}</strong> | Target: ${l.entity_id || 'Global'}</div>
+              </div>
+            `).join("");
+            return;
+          }
+        }
+      } catch {}
+      container.innerHTML = `<p style="color: var(--text-muted); padding: 1rem;">Audit logging active.</p>`;
+    }
+
+    // Backup & Restore
+    document.getElementById("btn-export-backup")?.addEventListener("click", () => SchoolData.exportJSON());
+    document.getElementById("btn-import-backup")?.addEventListener("click", () => document.getElementById("import-file-input").click());
+    document.getElementById("import-file-input")?.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          if (SchoolData.importJSON(evt.target.result)) {
+            showToast("Backup imported successfully!", "success");
+            setTimeout(() => location.reload(), 800);
+          } else {
+            showToast("Invalid JSON backup file.", "danger");
+          }
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    document.getElementById("btn-reset-data")?.addEventListener("click", () => {
+      if (confirm("Reset all portal data to official CBSE defaults?")) {
+        SchoolData.reset();
+        showToast("Data reset to defaults.", "info");
+        setTimeout(() => location.reload(), 500);
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", checkAuthState);
+  </script>
+</body>
+</html>
