@@ -1,19 +1,27 @@
 import assert from 'assert';
+import http from 'http';
 import { createClient } from '@supabase/supabase-js';
 import { ENV } from '../backend/src/config/env.js';
+import app from '../backend/src/server.js';
+import { runDatabaseSeed } from '../database/seed.js';
 
-const BASE_URL = 'http://localhost:4000';
+const PORT = 8092;
+const BASE_URL = `http://localhost:${PORT}`;
 
 async function runManagerWorkflowVerification() {
-  console.log('================================================================');
-  console.log('🧪 VERIFYING SARASWATI SHISHU VIDYA MANDIR CMS & VERCEL READINESS');
-  console.log('================================================================\n');
+  await runDatabaseSeed();
+  const server = http.createServer(app);
+  await new Promise<void>((resolve) => server.listen(PORT, () => resolve()));
+  try {
+    console.log('================================================================');
+    console.log('🧪 VERIFYING SARASWATI SHISHU VIDYA MANDIR CMS & VERCEL READINESS');
+    console.log('================================================================\n');
 
-  // 1. Initialize Supabase Verification Client
-  console.log('[Step 1] Initializing Server-Side Supabase Verification Client...');
-  const supabase = createClient(ENV.SUPABASE_URL, ENV.SUPABASE_SECRET_KEY);
-  assert(supabase, 'Supabase admin client initialized');
-  console.log('✅ Supabase connected successfully to project:', ENV.SUPABASE_URL);
+    // 1. Initialize Supabase Verification Client
+    console.log('[Step 1] Initializing Server-Side Supabase Verification Client...');
+    const supabase = createClient(ENV.SUPABASE_URL, ENV.SUPABASE_SECRET_KEY);
+    assert(supabase, 'Supabase admin client initialized');
+    console.log('✅ Supabase connected successfully to project:', ENV.SUPABASE_URL);
 
   // 2. School Manager Login
   console.log('\n[Step 2] School Manager Login via /api/auth/login...');
@@ -249,9 +257,12 @@ async function runManagerWorkflowVerification() {
   assert(auditJson.success && Array.isArray(auditJson.data) && auditJson.data.length > 0, 'Audit logs recorded');
   console.log(`✅ Audit Trail Verified: ${auditJson.data.length} actions logged in ledger`);
 
-  console.log('\n================================================================');
-  console.log('🎉 ALL TESTS PASSED: SCHOOL MANAGER CMS & SUPABASE WORKFLOW VERIFIED');
-  console.log('================================================================\n');
+    console.log('\n================================================================');
+    console.log('🎉 ALL TESTS PASSED: SCHOOL MANAGER CMS & SUPABASE WORKFLOW VERIFIED');
+    console.log('================================================================\n');
+  } finally {
+    server.close();
+  }
 }
 
 runManagerWorkflowVerification().catch(err => {

@@ -154,16 +154,18 @@ The portal will be active at:
 
 ---
 
-## 🔑 7. Default Administrator Credentials
+## 🔑 7. Administrator Roles & Access
 
-Upon initial database seeding, two default administrative accounts are provisioned:
+Upon initial database seeding, administrative accounts are provisioned for role-based governance:
 
-| Role | Email | Password | Access Level |
+| Role | Email | Initial Password | Access Level |
 |:---|:---|:---|:---|
-| **Super Admin** | `admin@ssvm.edu.in` | `Admin@SSVM2026!` | Full Master Access |
-| **Editor** | `editor@ssvm.edu.in` | `Editor@SSVM2026!` | Content & Documents Editor |
+| **Super Admin** | `admin@ssvm.edu.in` | *(Configured via Seed / Env)* | Full Master Access |
+| **Manager / Admin** | `manager@ssvm.edu.in` | *(Configured via Seed / Env)* | Full School Content & Document Management |
+| **Editor** | `editor@ssvm.edu.in` | *(Configured via Seed / Env)* | Content & Documents Draft / Review Editor |
+| **Viewer** | `viewer@ssvm.edu.in` | *(Configured via Seed / Env)* | Read-only Compliance & Audit Viewer |
 
-> ⚠️ **Production Security Notice:** Change these default passwords immediately after initial deployment via `/admin` -> `Settings` -> `Change Password`.
+> ⚠️ **Production Security Notice:** Administrator passwords must be managed securely through the admin settings or environment/database seed, and never committed to version control.
 
 ---
 

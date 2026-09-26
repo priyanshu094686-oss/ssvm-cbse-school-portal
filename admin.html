@@ -144,24 +144,22 @@
         <span class="cbse-affil-badge" style="margin-top: 0.35rem;">SARASWATI SHISHU VIDYA MANDIR</span>
       </div>
 
-      <form id="admin-login-form">
-        <div class="form-group">
+      <div id="login-error-alert" style="display: none; background: #fee2e2; border: 1px solid #ef4444; color: #991b1b; padding: 0.75rem 1rem; border-radius: var(--radius-sm); font-size: 0.875rem; margin-bottom: 1.25rem;">
+        <span id="login-error-text">Invalid email address or password.</span>
+      </div>
+
+      <form id="admin-login-form" autocomplete="on">
+        <div class="form-group" style="margin-bottom: 1.25rem;">
           <label class="form-label" for="login-email">Official Admin Email</label>
-          <input type="email" id="login-email" class="form-control" value="admin@ssvm.edu.in" required>
+          <input type="email" id="login-email" class="form-control" placeholder="admin@example.edu.in" required autocomplete="email">
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 1.5rem;">
           <label class="form-label" for="login-password">Password</label>
-          <input type="password" id="login-password" class="form-control" value="Admin@SSVM2026!" required>
+          <input type="password" id="login-password" class="form-control" placeholder="••••••••••••" required autocomplete="current-password">
         </div>
 
-        <div style="background: var(--bg-alt); padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">
-          <strong>Default Admin Credentials:</strong><br>
-          Super Admin: <code>admin@ssvm.edu.in</code> / <code>Admin@SSVM2026!</code><br>
-          Editor: <code>editor@ssvm.edu.in</code> / <code>Editor@SSVM2026!</code>
-        </div>
-
-        <button type="submit" class="btn btn-accent btn-lg" style="width: 100%;">
+        <button type="submit" id="btn-login-submit" class="btn btn-accent btn-lg" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
           <span>🔒</span> Authenticate & Enter Portal
         </button>
       </form>
@@ -574,35 +572,81 @@
     async function checkAuthState() {
       const modal = document.getElementById("admin-login-modal");
       if (!currentAuthToken) {
-        modal.style.display = "flex";
-      } else {
-        modal.style.display = "none";
-        if (currentUser) {
-          document.getElementById("admin-user-role").textContent = currentUser.role || "ADMIN";
-          document.getElementById("admin-user-name").textContent = currentUser.full_name || currentUser.email;
+        if (modal) modal.style.display = "flex";
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/auth/me", {
+          headers: getAuthHeaders()
+        });
+        const json = await res.json();
+        if (json.success && json.data) {
+          currentUser = json.data;
+          localStorage.setItem("ssvm_user", JSON.stringify(currentUser));
+          if (modal) modal.style.display = "none";
+          const roleEl = document.getElementById("admin-user-role");
+          const nameEl = document.getElementById("admin-user-name");
+          if (roleEl) roleEl.textContent = currentUser.role || "ADMIN";
+          if (nameEl) nameEl.textContent = currentUser.full_name || currentUser.email;
+
+          await Promise.allSettled([
+            loadDashboardStats(),
+            populateGeneralInfo(),
+            renderDisclosureDocs(),
+            renderFaculty(),
+            renderNotices(),
+            renderFees(),
+            renderCalendar(),
+            renderEnquiries(),
+            renderContacts(),
+            renderSMC(),
+            renderTC(),
+            renderAuditLogs()
+          ]);
+        } else {
+          // Token expired or invalid
+          currentAuthToken = null;
+          currentUser = null;
+          localStorage.removeItem("ssvm_token");
+          localStorage.removeItem("ssvm_user");
+          if (modal) modal.style.display = "flex";
         }
-        await Promise.allSettled([
-          loadDashboardStats(),
-          populateGeneralInfo(),
-          renderDisclosureDocs(),
-          renderFaculty(),
-          renderNotices(),
-          renderFees(),
-          renderCalendar(),
-          renderEnquiries(),
-          renderContacts(),
-          renderSMC(),
-          renderTC(),
-          renderAuditLogs()
-        ]);
+      } catch (err) {
+        console.warn("Auth check error:", err);
+        if (modal) modal.style.display = "flex";
       }
     }
 
     // Admin Login Handler
     document.getElementById("admin-login-form")?.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("login-email").value.trim();
-      const password = document.getElementById("login-password").value;
+      const emailInput = document.getElementById("login-email");
+      const passwordInput = document.getElementById("login-password");
+      const submitBtn = document.getElementById("btn-login-submit");
+      const errorAlert = document.getElementById("login-error-alert");
+      const errorText = document.getElementById("login-error-text");
+
+      if (errorAlert) errorAlert.style.display = "none";
+
+      const email = emailInput ? emailInput.value.trim() : "";
+      const password = passwordInput ? passwordInput.value : "";
+
+      if (!email || !password) {
+        if (errorAlert && errorText) {
+          errorText.textContent = "Please enter both official email and password.";
+          errorAlert.style.display = "block";
+        } else {
+          showToast("Please enter both official email and password.", "danger");
+        }
+        return;
+      }
+
+      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : "";
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "<span>⏳</span> Authenticating...";
+      }
 
       try {
         const res = await fetch("/api/auth/login", {
@@ -616,22 +660,30 @@
           currentUser = json.data.user;
           localStorage.setItem("ssvm_token", currentAuthToken);
           localStorage.setItem("ssvm_user", JSON.stringify(currentUser));
-          showToast(`Welcome, ${currentUser.full_name}!`, "success");
-          checkAuthState();
+          if (passwordInput) passwordInput.value = "";
+          showToast(`Welcome, ${currentUser.full_name || currentUser.email}!`, "success");
+          await checkAuthState();
         } else {
-          showToast(json.error?.message || "Invalid credentials.", "danger");
+          const msg = json.error?.message || "Invalid email address or password.";
+          if (errorAlert && errorText) {
+            errorText.textContent = msg;
+            errorAlert.style.display = "block";
+          } else {
+            showToast(msg, "danger");
+          }
         }
       } catch (err) {
-        // Standalone offline fallback login
-        if (email.includes("admin") || email.includes("editor")) {
-          currentAuthToken = "local-admin-token";
-          currentUser = { email, full_name: "School Administrator", role: "SUPER_ADMIN" };
-          localStorage.setItem("ssvm_token", currentAuthToken);
-          localStorage.setItem("ssvm_user", JSON.stringify(currentUser));
-          showToast("Authenticated in local administrator mode.", "success");
-          checkAuthState();
+        const msg = "Unable to connect to authentication server. Please check your network connection and try again.";
+        if (errorAlert && errorText) {
+          errorText.textContent = msg;
+          errorAlert.style.display = "block";
         } else {
-          showToast("Authentication server unavailable.", "danger");
+          showToast(msg, "danger");
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
         }
       }
     });
