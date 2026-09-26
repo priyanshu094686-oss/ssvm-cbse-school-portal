@@ -595,6 +595,15 @@
       if (storedUser) currentUser = JSON.parse(storedUser);
     } catch {}
 
+    const API_BASE = (window.location.protocol === 'file:' || ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port !== '4000'))
+      ? 'http://localhost:4000'
+      : '';
+
+    function apiFetch(url, options = {}) {
+      const fullUrl = url.startsWith('http') ? url : (API_BASE + (url.startsWith('/') ? url : '/' + url));
+      return fetch(fullUrl, options);
+    }
+
     function getAuthHeaders(isJson = true) {
       const headers = {};
       if (currentAuthToken) {
@@ -614,7 +623,7 @@
       }
 
       try {
-        const res = await fetch("/api/auth/me", {
+        const res = await apiFetch("/api/auth/me", {
           headers: getAuthHeaders()
         });
         const json = await res.json();
@@ -686,7 +695,7 @@
       }
 
       try {
-        const res = await fetch("/api/auth/login", {
+        const res = await apiFetch("/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
@@ -729,7 +738,7 @@
     document.getElementById("btn-admin-logout")?.addEventListener("click", async () => {
       try {
         if (currentAuthToken) {
-          await fetch("/api/auth/logout", {
+          await apiFetch("/api/auth/logout", {
             method: "POST",
             headers: getAuthHeaders()
           });
@@ -804,7 +813,7 @@
       }
 
       try {
-        const res = await fetch("/api/auth/change-password", {
+        const res = await apiFetch("/api/auth/change-password", {
           method: "POST",
           headers: getAuthHeaders(),
           body: JSON.stringify({
@@ -857,7 +866,7 @@
     // 1. DASHBOARD STATS
     async function loadDashboardStats() {
       try {
-        const res = await fetch("/api/admin/stats", { headers: getAuthHeaders() });
+        const res = await apiFetch("/api/admin/stats", { headers: getAuthHeaders() });
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data) {
@@ -883,7 +892,7 @@
     // 2. GENERAL INFORMATION
     async function populateGeneralInfo() {
       try {
-        const res = await fetch("/api/school");
+        const res = await apiFetch("/api/school");
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data) {
@@ -933,7 +942,7 @@
       };
 
       try {
-        const res = await fetch("/api/admin/school", {
+        const res = await apiFetch("/api/admin/school", {
           method: "PUT",
           headers: getAuthHeaders(),
           body: JSON.stringify(payload)
@@ -969,7 +978,7 @@
       if (!container) return;
 
       try {
-        const res = await fetch("/api/admin/disclosure-documents", { headers: getAuthHeaders() });
+        const res = await apiFetch("/api/admin/disclosure-documents", { headers: getAuthHeaders() });
         if (res.ok) {
           const json = await res.json();
           if (json.success && Array.isArray(json.data)) {
@@ -1050,7 +1059,7 @@
           const formData = new FormData();
           formData.append("file", fileInput.files[0]);
           try {
-            const upRes = await fetch("/api/upload/school-documents", {
+            const upRes = await apiFetch("/api/upload/school-documents", {
               method: "POST",
               headers: { "Authorization": `Bearer ${currentAuthToken}` },
               body: formData
@@ -1076,7 +1085,7 @@
         // Update Backend
         if (doc.id) {
           try {
-            await fetch(`/api/admin/disclosure-documents/${doc.id}`, {
+            await apiFetch(`/api/admin/disclosure-documents/${doc.id}`, {
               method: "PUT",
               headers: getAuthHeaders(),
               body: JSON.stringify({
@@ -1128,7 +1137,7 @@
       if (!container) return;
 
       try {
-        const res = await fetch("/api/admin/staff", { headers: getAuthHeaders() });
+        const res = await apiFetch("/api/admin/staff", { headers: getAuthHeaders() });
         if (res.ok) {
           const json = await res.json();
           if (json.success && Array.isArray(json.data)) {
@@ -1205,7 +1214,7 @@
 
         if (f.id) {
           try {
-            await fetch(`/api/admin/staff/${f.id}`, {
+            await apiFetch(`/api/admin/staff/${f.id}`, {
               method: "PUT",
               headers: getAuthHeaders(),
               body: JSON.stringify(payload)
@@ -1232,7 +1241,7 @@
         const f = cachedStaff[idx];
         if (f.id) {
           try {
-            await fetch(`/api/admin/staff/${f.id}`, {
+            await apiFetch(`/api/admin/staff/${f.id}`, {
               method: "DELETE",
               headers: getAuthHeaders()
             });
@@ -1296,7 +1305,7 @@
         };
 
         try {
-          const res = await fetch("/api/admin/staff", {
+          const res = await apiFetch("/api/admin/staff", {
             method: "POST",
             headers: getAuthHeaders(),
             body: JSON.stringify(payload)
@@ -1329,7 +1338,7 @@
       if (!container) return;
 
       try {
-        const res = await fetch("/api/admin/notices", { headers: getAuthHeaders() });
+        const res = await apiFetch("/api/admin/notices", { headers: getAuthHeaders() });
         if (res.ok) {
           const json = await res.json();
           if (json.success && Array.isArray(json.data)) {
@@ -1360,7 +1369,7 @@
         const n = cachedNotices[idx];
         if (n.id) {
           try {
-            await fetch(`/api/admin/notices/${n.id}`, {
+            await apiFetch(`/api/admin/notices/${n.id}`, {
               method: "DELETE",
               headers: getAuthHeaders()
             });
@@ -1425,7 +1434,7 @@
         };
 
         try {
-          const res = await fetch("/api/admin/notices", {
+          const res = await apiFetch("/api/admin/notices", {
             method: "POST",
             headers: getAuthHeaders(),
             body: JSON.stringify(payload)
@@ -1458,7 +1467,7 @@
       if (!container) return;
 
       try {
-        const res = await fetch("/api/admin/fees", { headers: getAuthHeaders() });
+        const res = await apiFetch("/api/admin/fees", { headers: getAuthHeaders() });
         if (res.ok) {
           const json = await res.json();
           if (json.success && Array.isArray(json.data) && json.data.length > 0) {
@@ -1516,7 +1525,7 @@
       });
 
       try {
-        await fetch("/api/admin/fees", {
+        await apiFetch("/api/admin/fees", {
           method: "PUT",
           headers: getAuthHeaders(),
           body: JSON.stringify({ fees: cachedFees })
@@ -1536,7 +1545,7 @@
       if (!container) return;
 
       try {
-        const res = await fetch("/api/admin/calendar", { headers: getAuthHeaders() });
+        const res = await apiFetch("/api/admin/calendar", { headers: getAuthHeaders() });
         if (res.ok) {
           const json = await res.json();
           if (json.success && Array.isArray(json.data)) {
@@ -1565,7 +1574,7 @@
         const ev = cachedCalendar[idx];
         if (ev.id) {
           try {
-            await fetch(`/api/admin/calendar/${ev.id}`, {
+            await apiFetch(`/api/admin/calendar/${ev.id}`, {
               method: "DELETE",
               headers: getAuthHeaders()
             });
@@ -1622,7 +1631,7 @@
         };
 
         try {
-          const res = await fetch("/api/admin/calendar", {
+          const res = await apiFetch("/api/admin/calendar", {
             method: "POST",
             headers: getAuthHeaders(),
             body: JSON.stringify(payload)
@@ -1653,7 +1662,7 @@
       if (!container) return;
 
       try {
-        const res = await fetch("/api/admin/admissions/enquiries", { headers: getAuthHeaders() });
+        const res = await apiFetch("/api/admin/admissions/enquiries", { headers: getAuthHeaders() });
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data && json.data.length > 0) {
@@ -1688,7 +1697,7 @@
 
     window.updateEnquiryStatus = async function(id, status) {
       try {
-        const res = await fetch(`/api/admin/admissions/enquiries/${id}/status`, {
+        const res = await apiFetch(`/api/admin/admissions/enquiries/${id}/status`, {
           method: "PATCH",
           headers: getAuthHeaders(),
           body: JSON.stringify({ status })
@@ -1703,7 +1712,7 @@
     window.deleteEnquiry = async function(id) {
       if (confirm("Delete this admission enquiry?")) {
         try {
-          await fetch(`/api/admin/admissions/enquiries/${id}`, {
+          await apiFetch(`/api/admin/admissions/enquiries/${id}`, {
             method: "DELETE",
             headers: getAuthHeaders()
           });
@@ -1720,7 +1729,7 @@
       if (!container) return;
 
       try {
-        const res = await fetch("/api/admin/contact/enquiries", { headers: getAuthHeaders() });
+        const res = await apiFetch("/api/admin/contact/enquiries", { headers: getAuthHeaders() });
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data && json.data.length > 0) {
@@ -1754,7 +1763,7 @@
 
     window.updateContactStatus = async function(id, status) {
       try {
-        const res = await fetch(`/api/admin/contact/enquiries/${id}/status`, {
+        const res = await apiFetch(`/api/admin/contact/enquiries/${id}/status`, {
           method: "PATCH",
           headers: getAuthHeaders(),
           body: JSON.stringify({ status })
@@ -1769,7 +1778,7 @@
     window.deleteContactMsg = async function(id) {
       if (confirm("Delete this contact message?")) {
         try {
-          await fetch(`/api/admin/contact/enquiries/${id}`, {
+          await apiFetch(`/api/admin/contact/enquiries/${id}`, {
             method: "DELETE",
             headers: getAuthHeaders()
           });
@@ -1787,7 +1796,7 @@
       if (!container) return;
 
       try {
-        const res = await fetch("/api/admin/smc", { headers: getAuthHeaders() });
+        const res = await apiFetch("/api/admin/smc", { headers: getAuthHeaders() });
         if (res.ok) {
           const json = await res.json();
           if (json.success && Array.isArray(json.data)) {
@@ -1851,7 +1860,7 @@
 
         if (m.id) {
           try {
-            await fetch(`/api/admin/smc/${m.id}`, {
+            await apiFetch(`/api/admin/smc/${m.id}`, {
               method: "PUT",
               headers: getAuthHeaders(),
               body: JSON.stringify(payload)
@@ -1877,7 +1886,7 @@
         const m = cachedSMC[idx];
         if (m.id) {
           try {
-            await fetch(`/api/admin/smc/${m.id}`, {
+            await apiFetch(`/api/admin/smc/${m.id}`, {
               method: "DELETE",
               headers: getAuthHeaders()
             });
@@ -1927,7 +1936,7 @@
         };
 
         try {
-          const res = await fetch("/api/admin/smc", {
+          const res = await apiFetch("/api/admin/smc", {
             method: "POST",
             headers: getAuthHeaders(),
             body: JSON.stringify(payload)
@@ -1959,7 +1968,7 @@
       if (!container) return;
 
       try {
-        const res = await fetch("/api/admin/transfer-certificates", { headers: getAuthHeaders() });
+        const res = await apiFetch("/api/admin/transfer-certificates", { headers: getAuthHeaders() });
         if (res.ok) {
           const json = await res.json();
           if (json.success && Array.isArray(json.data)) {
@@ -1991,7 +2000,7 @@
         const tc = cachedTCs[idx];
         if (tc.id) {
           try {
-            await fetch(`/api/admin/transfer-certificates/${tc.id}`, {
+            await apiFetch(`/api/admin/transfer-certificates/${tc.id}`, {
               method: "DELETE",
               headers: getAuthHeaders()
             });
@@ -2060,7 +2069,7 @@
           const formData = new FormData();
           formData.append("file", fileInput.files[0]);
           try {
-            const upRes = await fetch("/api/upload/transfer-certificates", {
+            const upRes = await apiFetch("/api/upload/transfer-certificates", {
               method: "POST",
               headers: { "Authorization": `Bearer ${currentAuthToken}` },
               body: formData
@@ -2085,7 +2094,7 @@
         };
 
         try {
-          const res = await fetch("/api/admin/transfer-certificates", {
+          const res = await apiFetch("/api/admin/transfer-certificates", {
             method: "POST",
             headers: getAuthHeaders(),
             body: JSON.stringify(payload)
@@ -2115,7 +2124,7 @@
       const container = document.getElementById("adm-audit-list");
       if (!container) return;
       try {
-        const res = await fetch("/api/admin/audit-logs", { headers: getAuthHeaders() });
+        const res = await apiFetch("/api/admin/audit-logs", { headers: getAuthHeaders() });
         if (res.ok) {
           const json = await res.json();
           if (json.success && json.data && json.data.length > 0) {
