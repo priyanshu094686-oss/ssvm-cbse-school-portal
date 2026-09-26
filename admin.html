@@ -284,6 +284,9 @@
           <div class="admin-nav-item" data-tab="tab-audit">
             <span>🔒 Security Audit Logs</span>
           </div>
+          <div class="admin-nav-item" data-tab="tab-security">
+            <span>🔐 Account Security</span>
+          </div>
         </aside>
 
         <!-- Main Content Panes -->
@@ -517,6 +520,40 @@
             <div id="adm-audit-list"></div>
           </div>
 
+          <!-- TAB 12: ACCOUNT SECURITY & CHANGE PASSWORD -->
+          <div class="admin-tab-pane" id="tab-security">
+            <h2 style="font-size: 1.4rem; color: var(--primary); margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-light); padding-bottom: 0.5rem;">
+              🔐 Account Security & Password Management
+            </h2>
+            <div style="max-width: 550px; background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.75rem; box-shadow: var(--shadow-sm);">
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+                Manage administrative credentials securely. Passwords are encrypted server-side with bcrypt and synchronized directly to Supabase.
+              </p>
+              <div id="pwd-change-alert" style="display: none; padding: 0.75rem 1rem; border-radius: var(--radius-sm); font-size: 0.875rem; margin-bottom: 1.25rem;"></div>
+
+              <form id="form-change-password">
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                  <label class="form-label" for="pwd-current">Current Password</label>
+                  <input type="password" id="pwd-current" class="form-control" placeholder="••••••••••••" required autocomplete="current-password">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                  <label class="form-label" for="pwd-new">New Password (Minimum 8 characters)</label>
+                  <input type="password" id="pwd-new" class="form-control" placeholder="••••••••••••" required minlength="8" autocomplete="new-password">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                  <label class="form-label" for="pwd-confirm">Confirm New Password</label>
+                  <input type="password" id="pwd-confirm" class="form-control" placeholder="••••••••••••" required minlength="8" autocomplete="new-password">
+                </div>
+
+                <button type="submit" id="btn-update-pwd" class="btn btn-accent btn-md" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                  <span>🔒</span> Update Password
+                </button>
+              </form>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -719,6 +756,102 @@
         const target = btn.getAttribute("data-tab");
         if (target) switchTab(target);
       });
+    });
+
+    // Change Password Form Handler
+    document.getElementById("form-change-password")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const currentPassword = document.getElementById("pwd-current")?.value;
+      const newPassword = document.getElementById("pwd-new")?.value;
+      const confirmPassword = document.getElementById("pwd-confirm")?.value;
+      const alertBox = document.getElementById("pwd-change-alert");
+      const submitBtn = document.getElementById("btn-update-pwd");
+
+      if (alertBox) {
+        alertBox.style.display = "none";
+      }
+
+      if (newPassword !== confirmPassword) {
+        if (alertBox) {
+          alertBox.textContent = "New password and confirmation do not match.";
+          alertBox.style.background = "#fee2e2";
+          alertBox.style.border = "1px solid #ef4444";
+          alertBox.style.color = "#991b1b";
+          alertBox.style.display = "block";
+        } else {
+          showToast("New password and confirmation do not match.", "danger");
+        }
+        return;
+      }
+
+      if (newPassword.length < 8) {
+        if (alertBox) {
+          alertBox.textContent = "New password must be at least 8 characters long.";
+          alertBox.style.background = "#fee2e2";
+          alertBox.style.border = "1px solid #ef4444";
+          alertBox.style.color = "#991b1b";
+          alertBox.style.display = "block";
+        } else {
+          showToast("New password must be at least 8 characters long.", "danger");
+        }
+        return;
+      }
+
+      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : "";
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "<span>⏳</span> Updating Password...";
+      }
+
+      try {
+        const res = await fetch("/api/auth/change-password", {
+          method: "POST",
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            current_password: currentPassword,
+            new_password: newPassword
+          })
+        });
+        const json = await res.json();
+        if (json.success) {
+          if (alertBox) {
+            alertBox.textContent = "Password changed successfully. Please remember your new password for your next login.";
+            alertBox.style.background = "#dcfce7";
+            alertBox.style.border = "1px solid #22c55e";
+            alertBox.style.color = "#166534";
+            alertBox.style.display = "block";
+          }
+          showToast("Password changed successfully.", "success");
+          document.getElementById("form-change-password").reset();
+        } else {
+          const msg = json.error?.message || "Failed to update password.";
+          if (alertBox) {
+            alertBox.textContent = msg;
+            alertBox.style.background = "#fee2e2";
+            alertBox.style.border = "1px solid #ef4444";
+            alertBox.style.color = "#991b1b";
+            alertBox.style.display = "block";
+          } else {
+            showToast(msg, "danger");
+          }
+        }
+      } catch (err) {
+        const msg = "Unable to connect to server. Please try again.";
+        if (alertBox) {
+          alertBox.textContent = msg;
+          alertBox.style.background = "#fee2e2";
+          alertBox.style.border = "1px solid #ef4444";
+          alertBox.style.color = "#991b1b";
+          alertBox.style.display = "block";
+        } else {
+          showToast(msg, "danger");
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
+        }
+      }
     });
 
     // 1. DASHBOARD STATS
