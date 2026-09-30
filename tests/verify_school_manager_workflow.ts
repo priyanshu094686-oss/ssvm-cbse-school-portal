@@ -5,11 +5,57 @@ import { ENV } from '../backend/src/config/env.js';
 import app from '../backend/src/server.js';
 import { runDatabaseSeed } from '../database/seed.js';
 
+import bcrypt from 'bcryptjs';
+import { db } from '../backend/src/db/database.js';
+
 const PORT = 8092;
 const BASE_URL = `http://localhost:${PORT}`;
 
 async function runManagerWorkflowVerification() {
   await runDatabaseSeed();
+
+  const testPassword = 'TestWorkflowPass2026!';
+  const testHash = await bcrypt.hash(testPassword, 10);
+  const testManagerEmail = 'test-manager-workflow@ssvm.internal';
+  const testEditorEmail = 'test-editor-workflow@ssvm.internal';
+  const testViewerEmail = 'test-viewer-workflow@ssvm.internal';
+
+  await db.saveTable('admin_users', [
+    {
+      id: 'usr-test-wm-1',
+      email: testManagerEmail,
+      password_hash: testHash,
+      full_name: 'Workflow Manager',
+      role: 'ADMIN',
+      is_active: true,
+      last_login_at: null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: 'usr-test-wm-2',
+      email: testEditorEmail,
+      password_hash: testHash,
+      full_name: 'Workflow Editor',
+      role: 'EDITOR',
+      is_active: true,
+      last_login_at: null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: 'usr-test-wm-3',
+      email: testViewerEmail,
+      password_hash: testHash,
+      full_name: 'Workflow Viewer',
+      role: 'VIEWER',
+      is_active: true,
+      last_login_at: null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+  ]);
+
   const server = http.createServer(app);
   await new Promise<void>((resolve) => server.listen(PORT, () => resolve()));
   try {
@@ -29,8 +75,8 @@ async function runManagerWorkflowVerification() {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      email: 'manager@ssvm.edu.in',
-      password: 'Manager@SSVM2026!'
+      email: testManagerEmail,
+      password: testPassword
     })
   });
   const loginJson: any = await loginRes.json();
@@ -210,7 +256,7 @@ async function runManagerWorkflowVerification() {
   const editorLoginRes = await fetch(`${BASE_URL}/api/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: 'editor@ssvm.edu.in', password: 'Editor@SSVM2026!' })
+    body: JSON.stringify({ email: testEditorEmail, password: testPassword })
   });
   const editorJson: any = await editorLoginRes.json();
   const editorToken = editorJson.data.token;
@@ -226,7 +272,7 @@ async function runManagerWorkflowVerification() {
   const viewerLoginRes = await fetch(`${BASE_URL}/api/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: 'viewer@ssvm.edu.in', password: 'Viewer@SSVM2026!' })
+    body: JSON.stringify({ email: testViewerEmail, password: testPassword })
   });
   const viewerJson: any = await viewerLoginRes.json();
   const viewerToken = viewerJson.data.token;

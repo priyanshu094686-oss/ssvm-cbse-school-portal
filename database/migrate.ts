@@ -59,19 +59,7 @@ export async function runMigrations() {
   console.log('🔄 Ensuring local data store is active and seeded...');
   const settings = await db.queryOne('SELECT * FROM school_settings');
   if (!settings) {
-    // Seed initial placeholder data in local storage
-    const seedAdmin = [
-      'usr-super-admin-01',
-      'admin@ssvm.edu.in',
-      '$2a$10$wN9Q7L25mJ2/T.qXN77Cxe0uR3VbLh8/Kq5m7U3N78L2v4rA26P8i', // Admin@SSVM2026!
-      'School Super Administrator',
-      'SUPER_ADMIN'
-    ];
-    await db.execute(
-      `INSERT INTO admin_users (id, email, password_hash, full_name, role) VALUES ($1, $2, $3, $4, $5)`,
-      seedAdmin
-    );
-    console.log('✅ Default administrator seeded.');
+    console.log('ℹ️ Local data store ready. Run "npm run db:setup-admin" to configure administrator account.');
   }
 
   console.log('🎉 Database migrations and schema checks complete.');

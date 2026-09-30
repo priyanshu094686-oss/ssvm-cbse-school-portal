@@ -14,13 +14,16 @@ export function authenticateToken(req: AuthenticatedRequest, res: Response, next
   if (!token && req.cookies && req.cookies.ssvm_session) {
     token = req.cookies.ssvm_session;
   }
+  if (!token && req.signedCookies && req.signedCookies.ssvm_session) {
+    token = req.signedCookies.ssvm_session;
+  }
 
   if (!token) {
     res.status(401).json({
       success: false,
       error: {
         code: 'UNAUTHORIZED',
-        message: 'Authentication required to access this administrative resource.'
+        message: 'Authentication required.'
       }
     });
     return;
@@ -31,11 +34,11 @@ export function authenticateToken(req: AuthenticatedRequest, res: Response, next
     req.user = decoded;
     next();
   } catch {
-    res.status(403).json({
+    res.status(401).json({
       success: false,
       error: {
-        code: 'FORBIDDEN',
-        message: 'Invalid or expired session token. Please log in again.'
+        code: 'UNAUTHORIZED',
+        message: 'Session expired. Please sign in again.'
       }
     });
   }
@@ -46,7 +49,7 @@ export function requireRole(...allowedRoles: UserRole[]) {
     if (!req.user) {
       res.status(401).json({
         success: false,
-        error: { code: 'UNAUTHORIZED', message: 'User not authenticated.' }
+        error: { code: 'UNAUTHORIZED', message: 'Authentication required.' }
       });
       return;
     }

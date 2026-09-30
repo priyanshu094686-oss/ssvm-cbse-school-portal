@@ -4,60 +4,13 @@ import { db } from '../backend/src/db/database.js';
 export async function runDatabaseSeed() {
   console.log('🌱 Starting Saraswati Shishu Vidya Mandir database seeding...');
 
-  // 1. Seed Admin Users
-  const superAdminPasswordHash = await bcrypt.hash('Admin@SSVM2026!', 10);
-  const managerPasswordHash = await bcrypt.hash('Manager@SSVM2026!', 10);
-  const editorPasswordHash = await bcrypt.hash('Editor@SSVM2026!', 10);
-  const viewerPasswordHash = await bcrypt.hash('Viewer@SSVM2026!', 10);
-
-  const adminUsers = [
-    {
-      id: 'usr-super-admin-01',
-      email: 'admin@ssvm.edu.in',
-      password_hash: superAdminPasswordHash,
-      full_name: 'School Super Administrator',
-      role: 'SUPER_ADMIN',
-      is_active: true,
-      last_login_at: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'usr-manager-02',
-      email: 'manager@ssvm.edu.in',
-      password_hash: managerPasswordHash,
-      full_name: 'School Content Manager',
-      role: 'ADMIN',
-      is_active: true,
-      last_login_at: null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'usr-editor-03',
-      email: 'editor@ssvm.edu.in',
-      password_hash: editorPasswordHash,
-      full_name: 'Academic Content Editor',
-      role: 'EDITOR',
-      is_active: true,
-      last_login_at: null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'usr-viewer-04',
-      email: 'viewer@ssvm.edu.in',
-      password_hash: viewerPasswordHash,
-      full_name: 'Audit & Compliance Viewer',
-      role: 'VIEWER',
-      is_active: true,
-      last_login_at: null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    }
-  ];
-  db.saveTable('admin_users', adminUsers);
-  console.log('✅ Admin Users seeded.');
+  // 1. Admin Users Status (Configured via npm run db:setup-admin)
+  const existingUsers = db.getTable('admin_users');
+  if (!existingUsers || existingUsers.length === 0) {
+    console.log('ℹ️ Admin Users: No accounts configured yet. Run "npm run db:setup-admin" to create your SUPER_ADMIN account.');
+  } else {
+    console.log(`ℹ️ Admin Users: Preserving ${existingUsers.length} existing admin account(s).`);
+  }
 
   // 2. Seed School Settings (Official Placeholders)
   const schoolSettings = [

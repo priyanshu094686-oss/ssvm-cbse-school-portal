@@ -1,4 +1,6 @@
-const BASE_URL = 'http://localhost:4000';
+import { db } from '../backend/src/db/database.js';
+
+const BASE_URL = process.env.TEST_BASE_URL || 'http://localhost:4000';
 
 async function testFullFlow() {
   console.log('================================================================');
@@ -12,13 +14,21 @@ async function testFullFlow() {
   console.log('✅ Server Health:', healthJson);
 
   // 2. Admin Authentication
-  console.log('\n[Step 2] Authenticating as Super Admin...');
+  const testAdminEmail = process.env.TEST_ADMIN_EMAIL || db.getTable('admin_users')[0]?.email;
+  const testAdminPassword = process.env.TEST_ADMIN_PASSWORD;
+
+  if (!testAdminEmail || !testAdminPassword) {
+    console.log('ℹ️ Skipping live flow authentication test (TEST_ADMIN_PASSWORD not set). Run "npm test" for unit test suite.');
+    return;
+  }
+
+  console.log(`\n[Step 2] Authenticating as Admin (${testAdminEmail})...`);
   const loginRes = await fetch(`${BASE_URL}/api/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      email: 'admin@ssvm.edu.in',
-      password: 'Admin@SSVM2026!'
+      email: testAdminEmail,
+      password: testAdminPassword
     })
   });
   const loginJson: any = await loginRes.json();

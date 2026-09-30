@@ -6,6 +6,7 @@ export const globalLimiter = rateLimit({
   max: 500, // Limit each IP to 500 requests per window
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
   message: {
     success: false,
     error: {
@@ -21,6 +22,7 @@ export const authLimiter = rateLimit({
   max: 15, // Max 15 attempts per 15 mins
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
   message: {
     success: false,
     error: {
@@ -36,6 +38,7 @@ export const enquiryLimiter = rateLimit({
   max: 10, // Max 10 submissions per hour per IP
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === 'test',
   message: {
     success: false,
     error: {

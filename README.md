@@ -154,18 +154,24 @@ The portal will be active at:
 
 ---
 
-## 🔑 7. Administrator Roles & Access
+## 🔑 7. Administrator Setup & Security
 
-Upon initial database seeding, administrative accounts are provisioned for role-based governance:
+The portal uses zero-knowledge bcrypt password hashing and secure HTTP-only cookies. To initialize your custom SUPER_ADMIN account:
 
-| Role | Email | Initial Password | Access Level |
-|:---|:---|:---|:---|
-| **Super Admin** | `admin@ssvm.edu.in` | *(Configured via Seed / Env)* | Full Master Access |
-| **Manager / Admin** | `manager@ssvm.edu.in` | *(Configured via Seed / Env)* | Full School Content & Document Management |
-| **Editor** | `editor@ssvm.edu.in` | *(Configured via Seed / Env)* | Content & Documents Draft / Review Editor |
-| **Viewer** | `viewer@ssvm.edu.in` | *(Configured via Seed / Env)* | Read-only Compliance & Audit Viewer |
+```bash
+# Interactively set up or reset your master Super Admin account
+npm run db:setup-admin
+```
 
-> ⚠️ **Production Security Notice:** Administrator passwords must be managed securely through the admin settings or environment/database seed, and never committed to version control.
+The setup script prompts interactively with masked password inputs:
+- `Admin Email:` (your chosen official email)
+- `New Password:` (minimum 8 characters, masked)
+- `Confirm Password:` (confirmation matching, masked)
+
+To verify authentication pipeline health without exposing secrets:
+```bash
+npm run db:diagnose-auth
+```
 
 ---
 

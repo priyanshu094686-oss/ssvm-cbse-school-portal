@@ -13,6 +13,9 @@
     "db:migrate": "tsx database/migrate.ts",
     "db:seed": "tsx database/seed.ts",
     "db:reset": "tsx database/reset.ts",
+    "db:setup-admin": "tsx scripts/setup_admin.ts",
+    "db:reset-passwords": "tsx scripts/setup_admin.ts",
+    "db:diagnose-auth": "tsx scripts/diagnose_auth.ts",
     "test": "tsx tests/run_all_tests.ts"
   },
   "keywords": [

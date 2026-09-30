@@ -1,6 +1,8 @@
 import assert from 'assert';
 import http from 'http';
+import bcrypt from 'bcryptjs';
 import app from '../backend/src/server.js';
+import { db } from '../backend/src/db/database.js';
 import { runDatabaseSeed } from '../database/seed.js';
 
 const PORT = 8094;
@@ -11,16 +13,31 @@ async function runChangePasswordVerification() {
   console.log('🔐 VERIFYING ADMIN PASSWORD CHANGE & RBAC SECURITY LIFECYCLE');
   console.log('================================================================\n');
 
-  // Seed fresh state
   await runDatabaseSeed();
+
+  const testAdminEmail = process.env.TEST_CHANGE_PWD_EMAIL || 'test-manager@ssvm.internal';
+  const originalPassword = process.env.TEST_ORIGINAL_PWD || 'OriginalManagerPass2026!';
+  const temporaryNewPassword = 'Secured#NewManager2026!';
+
+  const originalHash = await bcrypt.hash(originalPassword, 10);
+  const testUser = {
+    id: 'usr-test-manager',
+    email: testAdminEmail,
+    password_hash: originalHash,
+    full_name: 'Test School Manager',
+    role: 'ADMIN',
+    is_active: true,
+    last_login_at: null,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
+
+  await db.saveTable('admin_users', [testUser]);
+
   const server = http.createServer(app);
   await new Promise<void>((resolve) => server.listen(PORT, () => resolve()));
 
   try {
-    const testAdminEmail = 'manager@ssvm.edu.in';
-    const originalPassword = 'Manager@SSVM2026!';
-    const temporaryNewPassword = 'Secured#NewManager2026!';
-
     // 1. Initial Login with current password
     console.log('[Step 1] Logging in with current manager credentials...');
     const login1Res = await fetch(`${BASE_URL}/api/auth/login`, {
@@ -94,8 +111,8 @@ async function runChangePasswordVerification() {
     assert.strictEqual(authJson.success, true, 'Admin stats should be accessible with new token');
     console.log('✅ Requirement 4 Verified: Authorized access to admin dashboard verified.');
 
-    // 7. Reset back to clean seeded password
-    console.log('\n[Step 7] Restoring original seeded password...');
+    // 7. Reset back to clean password
+    console.log('\n[Step 7] Restoring original password...');
     const restoreRes = await fetch(`${BASE_URL}/api/auth/change-password`, {
       method: 'POST',
       headers: {
@@ -108,7 +125,7 @@ async function runChangePasswordVerification() {
       })
     });
     assert.strictEqual(restoreRes.status, 200, 'Password restored');
-    console.log('✅ Account restored to clean seed state.');
+    console.log('✅ Account restored to clean state.');
 
     console.log('\n================================================================');
     console.log('🎉 ALL 4 PASSWORD CHANGE VERIFICATION REQUIREMENTS PASSED');

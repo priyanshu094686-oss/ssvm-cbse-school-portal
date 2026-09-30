@@ -339,12 +339,6 @@ CREATE POLICY "Service Role full access to audit_logs" ON public.audit_logs FOR 
 CREATE POLICY "Service Role full access to admin_users" ON public.admin_users FOR ALL USING (true);
 
 -- 8. Seed Initial Data with Official Placeholders
-INSERT INTO public.admin_users (id, email, password_hash, full_name, role)
-VALUES 
-('usr-super-admin-01', 'admin@ssvm.edu.in', '$2a$10$Q7sKxWjV3f4P5rS/T7/57.9cOz/tA2fJ9F0xU3L12345678901234', 'School Super Administrator', 'SUPER_ADMIN'),
-('usr-editor-02', 'editor@ssvm.edu.in', '$2a$10$Q7sKxWjV3f4P5rS/T7/57.9cOz/tA2fJ9F0xU3L12345678901234', 'Academic Content Editor', 'EDITOR')
-ON CONFLICT (id) DO NOTHING;
-
 INSERT INTO public.school_settings (id, school_name, affiliation_number, school_code, address, pin_code, official_email, official_phone, principal_name, principal_qualification, principal_message, board, classes)
 VALUES
 ('settings-ssvm-01', 'Saraswati Shishu Vidya Mandir', '[OFFICIAL CBSE AFFILIATION NUMBER]', '[OFFICIAL SCHOOL CODE]', '[OFFICIAL SCHOOL ADDRESS]', '[PIN CODE]', '[OFFICIAL SCHOOL EMAIL]', '[OFFICIAL PHONE NUMBER]', '[PRINCIPAL NAME]', '[PRINCIPAL QUALIFICATION]', 'Welcome to Saraswati Shishu Vidya Mandir. Our institution is dedicated to imparting holistic education rooted in timeless cultural values while embracing modern pedagogical standards prescribed by the Central Board of Secondary Education (CBSE).', 'Central Board of Secondary Education (CBSE), New Delhi', 'Classes 1 to 10')

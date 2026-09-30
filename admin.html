@@ -151,15 +151,18 @@
       <form id="admin-login-form" autocomplete="on">
         <div class="form-group" style="margin-bottom: 1.25rem;">
           <label class="form-label" for="login-email">Official Admin Email</label>
-          <input type="email" id="login-email" class="form-control" placeholder="admin@example.edu.in" required autocomplete="email">
+          <input type="email" id="login-email" class="form-control" placeholder="name@school.edu.in" required autocomplete="email">
         </div>
 
         <div class="form-group" style="margin-bottom: 1.5rem;">
           <label class="form-label" for="login-password">Password</label>
-          <input type="password" id="login-password" class="form-control" placeholder="••••••••••••" required autocomplete="current-password">
+          <div style="position: relative;">
+            <input type="password" id="login-password" class="form-control" placeholder="••••••••••••" required autocomplete="current-password" style="padding-right: 2.75rem;">
+            <button type="button" class="pwd-toggle-btn" onclick="togglePwdVisibility('login-password', this)" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #64748b;" title="Show/Hide password">👁️</button>
+          </div>
         </div>
 
-        <button type="submit" id="btn-login-submit" class="btn btn-accent btn-lg" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+        <button type="submit" id="btn-login-submit" class="btn btn-accent btn-lg" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 700;">
           <span>🔒</span> Authenticate & Enter Portal
         </button>
       </form>
@@ -531,7 +534,7 @@
               <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
                 <div>
                   <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.05em;">Currently Signed In Account</div>
-                  <div style="font-weight: 700; color: var(--primary); font-size: 1.05rem;" id="pwd-user-email">admin@ssvm.edu.in</div>
+                  <div style="font-weight: 700; color: var(--primary); font-size: 1.05rem;" id="pwd-user-email">—</div>
                 </div>
                 <div>
                   <span class="badge badge-cbse" id="pwd-user-role" style="font-size: 0.8rem; padding: 0.3rem 0.75rem;">SUPER_ADMIN</span>
@@ -607,14 +610,8 @@
   </footer>
 
   <script>
-    // Authentication State Management
-    let currentAuthToken = localStorage.getItem("ssvm_token") || null;
+    // Authentication State Management (Server-side Session & HTTP-Only Cookie)
     let currentUser = null;
-
-    try {
-      const storedUser = localStorage.getItem("ssvm_user");
-      if (storedUser) currentUser = JSON.parse(storedUser);
-    } catch {}
 
     const API_BASE = (window.location.protocol === 'file:' || ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port !== '4000'))
       ? 'http://localhost:4000'
@@ -622,14 +619,22 @@
 
     function apiFetch(url, options = {}) {
       const fullUrl = url.startsWith('http') ? url : (API_BASE + (url.startsWith('/') ? url : '/' + url));
-      return fetch(fullUrl, options);
+      const defaultHeaders = {};
+      if (options.body && typeof options.body === 'string' && !options.headers?.['Content-Type']) {
+        defaultHeaders['Content-Type'] = 'application/json';
+      }
+      return fetch(fullUrl, {
+        ...options,
+        credentials: 'include',
+        headers: {
+          ...defaultHeaders,
+          ...(options.headers || {})
+        }
+      });
     }
 
     function getAuthHeaders(isJson = true) {
       const headers = {};
-      if (currentAuthToken) {
-        headers["Authorization"] = `Bearer ${currentAuthToken}`;
-      }
       if (isJson) {
         headers["Content-Type"] = "application/json";
       }
@@ -638,19 +643,12 @@
 
     async function checkAuthState() {
       const modal = document.getElementById("admin-login-modal");
-      if (!currentAuthToken) {
-        if (modal) modal.style.display = "flex";
-        return;
-      }
 
       try {
-        const res = await apiFetch("/api/auth/me", {
-          headers: getAuthHeaders()
-        });
+        const res = await apiFetch("/api/auth/me");
         const json = await res.json();
-        if (json.success && json.data) {
+        if (res.ok && json.success && json.data) {
           currentUser = json.data;
-          localStorage.setItem("ssvm_user", JSON.stringify(currentUser));
           if (modal) modal.style.display = "none";
           const roleEl = document.getElementById("admin-user-role");
           const nameEl = document.getElementById("admin-user-name");
@@ -676,15 +674,11 @@
             renderAuditLogs()
           ]);
         } else {
-          // Token expired or invalid
-          currentAuthToken = null;
           currentUser = null;
-          localStorage.removeItem("ssvm_token");
-          localStorage.removeItem("ssvm_user");
           if (modal) modal.style.display = "flex";
         }
       } catch (err) {
-        console.warn("Auth check error:", err);
+        currentUser = null;
         if (modal) modal.style.display = "flex";
       }
     }
@@ -722,20 +716,16 @@
       try {
         const res = await apiFetch("/api/auth/login", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
         });
         const json = await res.json();
-        if (json.success && json.data) {
-          currentAuthToken = json.data.token;
+        if (res.ok && json.success && json.data) {
           currentUser = json.data.user;
-          localStorage.setItem("ssvm_token", currentAuthToken);
-          localStorage.setItem("ssvm_user", JSON.stringify(currentUser));
           if (passwordInput) passwordInput.value = "";
           showToast(`Welcome, ${currentUser.full_name || currentUser.email}!`, "success");
           await checkAuthState();
         } else {
-          const msg = json.error?.message || "Invalid email address or password.";
+          const msg = json.error?.message || "Invalid email or password.";
           if (errorAlert && errorText) {
             errorText.textContent = msg;
             errorAlert.style.display = "block";
@@ -744,9 +734,10 @@
           }
         }
       } catch (err) {
-        const msg = "Unable to connect to authentication server. Please check your network connection and try again.";
+        console.error("Login connection error:", err);
+        const msg = "Unable to connect to authentication server. Please ensure the backend server is running.";
         if (errorAlert && errorText) {
-          errorText.textContent = msg;
+          errorText.innerHTML = `<strong>Connection Error:</strong> ${msg}`;
           errorAlert.style.display = "block";
         } else {
           showToast(msg, "danger");
@@ -762,16 +753,10 @@
     // Admin Logout Handler
     document.getElementById("btn-admin-logout")?.addEventListener("click", async () => {
       try {
-        if (currentAuthToken) {
-          await apiFetch("/api/auth/logout", {
-            method: "POST",
-            headers: getAuthHeaders()
-          });
-        }
+        await apiFetch("/api/auth/logout", {
+          method: "POST"
+        });
       } catch {}
-      localStorage.removeItem("ssvm_token");
-      localStorage.removeItem("ssvm_user");
-      currentAuthToken = null;
       currentUser = null;
       showToast("Logged out successfully.", "info");
       checkAuthState();
@@ -2109,7 +2094,6 @@
           try {
             const upRes = await apiFetch("/api/upload/transfer-certificates", {
               method: "POST",
-              headers: { "Authorization": `Bearer ${currentAuthToken}` },
               body: formData
             });
             const upJson = await upRes.json();

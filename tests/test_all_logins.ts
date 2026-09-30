@@ -1,23 +1,43 @@
 import assert from 'assert';
 import http from 'http';
+import bcrypt from 'bcryptjs';
 import app from '../backend/src/server.js';
+import { db } from '../backend/src/db/database.js';
 
 const PORT = 8097;
 const BASE_URL = `http://localhost:${PORT}`;
 
 async function verifyAllAccounts() {
-  console.log('🧪 VERIFYING ALL ADMIN ACCOUNTS & PASSWORD AUTHENTICATION...\n');
+  console.log('🧪 VERIFYING ROLE-BASED ADMIN ACCOUNTS & PASSWORD AUTHENTICATION...\n');
+
+  const testPassword = process.env.TEST_ROLE_PASSWORD || 'RoleTestPass2026!';
+  const testHash = await bcrypt.hash(testPassword, 10);
+
+  const testCases = [
+    { email: 'test-superadmin@ssvm.internal', password: testPassword, role: 'SUPER_ADMIN' as const, name: 'Test Super Admin' },
+    { email: 'test-manager@ssvm.internal', password: testPassword, role: 'ADMIN' as const, name: 'Test Manager' },
+    { email: 'test-editor@ssvm.internal', password: testPassword, role: 'EDITOR' as const, name: 'Test Editor' },
+    { email: 'test-viewer@ssvm.internal', password: testPassword, role: 'VIEWER' as const, name: 'Test Viewer' },
+  ];
+
+  const testUsers = testCases.map((tc, idx) => ({
+    id: `usr-test-role-${idx + 1}`,
+    email: tc.email,
+    password_hash: testHash,
+    full_name: tc.name,
+    role: tc.role,
+    is_active: true,
+    last_login_at: null,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }));
+
+  await db.saveTable('admin_users', testUsers);
+
   const server = http.createServer(app);
   await new Promise<void>((resolve) => server.listen(PORT, () => resolve()));
 
   try {
-    const testCases = [
-      { email: 'admin@ssvm.edu.in', password: 'Admin@SSVM2026!', role: 'SUPER_ADMIN' },
-      { email: 'manager@ssvm.edu.in', password: 'Manager@SSVM2026!', role: 'ADMIN' },
-      { email: 'editor@ssvm.edu.in', password: 'Editor@SSVM2026!', role: 'EDITOR' },
-      { email: 'viewer@ssvm.edu.in', password: 'Viewer@SSVM2026!', role: 'VIEWER' },
-    ];
-
     for (const tc of testCases) {
       console.log(`[Testing Login] ${tc.email} (${tc.role})...`);
       const res = await fetch(`${BASE_URL}/api/auth/login`, {
@@ -49,7 +69,7 @@ async function verifyAllAccounts() {
         },
         body: JSON.stringify({
           current_password: tc.password,
-          new_password: tc.password // Keep same password so it remains valid
+          new_password: tc.password
         })
       });
       const changeData: any = await changeRes.json();
@@ -58,7 +78,7 @@ async function verifyAllAccounts() {
       console.log(`  ✅ Password change verification OK for ${tc.email}\n`);
     }
 
-    console.log('🎉 ALL 4 ACCOUNTS PASSED LOGIN AND PASSWORD MANAGEMENT CHECKS 100%!');
+    console.log('🎉 ALL ROLE ACCOUNTS PASSED LOGIN AND PASSWORD MANAGEMENT CHECKS 100%!');
   } finally {
     server.close();
   }

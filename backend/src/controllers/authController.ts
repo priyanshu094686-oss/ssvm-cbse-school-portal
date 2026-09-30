@@ -23,12 +23,12 @@ export const AuthController = {
 
       const { email, password } = parsed.data;
       const users = db.getTable('admin_users');
-      const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+      const user = users.find(u => u.email && u.email.toLowerCase() === email.toLowerCase());
 
       if (!user || !user.is_active) {
         res.status(401).json({
           success: false,
-          error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email address or password.' }
+          error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password.' }
         });
         return;
       }
@@ -37,14 +37,14 @@ export const AuthController = {
       if (!passwordMatch) {
         res.status(401).json({
           success: false,
-          error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email address or password.' }
+          error: { code: 'INVALID_CREDENTIALS', message: 'Invalid email or password.' }
         });
         return;
       }
 
       // Update last login
       user.last_login_at = new Date().toISOString();
-      db.saveTable('admin_users', users);
+      await db.saveTable('admin_users', users);
 
       const tokenPayload = {
         id: user.id,
@@ -60,7 +60,8 @@ export const AuthController = {
         httpOnly: true,
         secure: ENV.NODE_ENV === 'production',
         sameSite: 'lax',
-        maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        path: '/'
       });
 
       await AuditService.log({
@@ -99,7 +100,13 @@ export const AuthController = {
       });
     }
 
-    res.clearCookie('ssvm_session');
+    res.clearCookie('ssvm_session', {
+      httpOnly: true,
+      secure: ENV.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/'
+    });
+
     res.json({
       success: true,
       data: { message: 'Logged out successfully.' }
@@ -111,18 +118,18 @@ export const AuthController = {
     if (!req.user) {
       res.status(401).json({
         success: false,
-        error: { code: 'UNAUTHORIZED', message: 'Not logged in.' }
+        error: { code: 'UNAUTHORIZED', message: 'Authentication required.' }
       });
       return;
     }
 
     const users = db.getTable('admin_users');
-    const user = users.find(u => u.id === req.user?.id);
+    const user = users.find(u => u.id === req.user?.id || (u.email && u.email.toLowerCase() === req.user?.email?.toLowerCase()));
 
-    if (!user) {
-      res.status(404).json({
+    if (!user || !user.is_active) {
+      res.status(401).json({
         success: false,
-        error: { code: 'NOT_FOUND', message: 'User profile not found.' }
+        error: { code: 'UNAUTHORIZED', message: 'Authentication required.' }
       });
       return;
     }
@@ -142,6 +149,14 @@ export const AuthController = {
   // POST /api/auth/change-password
   async changePassword(req: AuthenticatedRequest, res: Response): Promise<void> {
     try {
+      if (!req.user) {
+        res.status(401).json({
+          success: false,
+          error: { code: 'UNAUTHORIZED', message: 'Authentication required.' }
+        });
+        return;
+      }
+
       const parsed = ChangePasswordSchema.safeParse(req.body);
       if (!parsed.success) {
         res.status(400).json({
@@ -153,7 +168,7 @@ export const AuthController = {
 
       const { current_password, new_password } = parsed.data;
       const users = db.getTable('admin_users');
-      const user = users.find(u => u.id === req.user?.id);
+      const user = users.find(u => u.id === req.user?.id || (u.email && u.email.toLowerCase() === req.user?.email?.toLowerCase()));
 
       if (!user) {
         res.status(404).json({
@@ -174,7 +189,7 @@ export const AuthController = {
 
       user.password_hash = await bcrypt.hash(new_password, 10);
       user.updated_at = new Date().toISOString();
-      db.saveTable('admin_users', users);
+      await db.saveTable('admin_users', users);
 
       await AuditService.log({
         admin_user_id: user.id,

@@ -43,27 +43,35 @@ async function runEndToEndVerification() {
   // --------------------------------------------------------------------------
   console.log('[Step 1] Testing Admin Authentication...');
   let adminToken = '';
-  try {
-    const loginRes = await fetch(`${BASE_URL}/api/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: 'admin@ssvm.edu.in',
-        password: 'Admin@SSVM2026!'
-      })
-    });
-    const loginJson = await loginRes.json();
-    if (loginJson.success && loginJson.data?.token) {
-      adminToken = loginJson.data.token;
-      auditResults.adminLogin = 'PASSED';
-      console.log(`   ✅ Admin Login Successful. Role: ${loginJson.data.user.role}, Name: ${loginJson.data.user.full_name}`);
-    } else {
+  const testEmail = process.env.TEST_ADMIN_EMAIL || process.env.SETUP_ADMIN_EMAIL;
+  const testPassword = process.env.TEST_ADMIN_PASSWORD || process.env.SETUP_ADMIN_PASSWORD;
+
+  if (testEmail && testPassword) {
+    try {
+      const loginRes = await fetch(`${BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: testEmail,
+          password: testPassword
+        })
+      });
+      const loginJson = await loginRes.json();
+      if (loginJson.success && loginJson.data?.token) {
+        adminToken = loginJson.data.token;
+        auditResults.adminLogin = 'PASSED';
+        console.log(`   ✅ Admin Login Successful. Role: ${loginJson.data.user.role}, Name: ${loginJson.data.user.full_name}`);
+      } else {
+        auditResults.adminLogin = 'FAILED';
+        console.error('   ❌ Admin Login Failed:', loginJson);
+      }
+    } catch (err: any) {
       auditResults.adminLogin = 'FAILED';
-      console.error('   ❌ Admin Login Failed:', loginJson);
+      console.error('   ❌ Admin Login Error:', err.message);
     }
-  } catch (err: any) {
-    auditResults.adminLogin = 'FAILED';
-    console.error('   ❌ Admin Login Error:', err.message);
+  } else {
+    auditResults.adminLogin = 'SKIPPED';
+    console.log('   ℹ️ Admin Login Step Skipped (Provide TEST_ADMIN_EMAIL and TEST_ADMIN_PASSWORD to test live login)');
   }
 
   // --------------------------------------------------------------------------

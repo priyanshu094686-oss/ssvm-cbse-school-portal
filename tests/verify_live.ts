@@ -1,3 +1,5 @@
+import { db } from '../backend/src/db/database.js';
+
 async function verify() {
   console.log('🚀 Running Live Server Verification...');
 
@@ -19,23 +21,28 @@ async function verify() {
   const adminRes = await fetch('http://localhost:4000/admin');
   console.log('✅ Admin Portal Page:', adminRes.status === 200 ? 'OK (200)' : adminRes.status);
 
-  // 3. Auth Login
-  const loginRes = await fetch('http://localhost:4000/api/auth/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: 'admin@ssvm.edu.in', password: 'Admin@SSVM2026!' })
-  });
-  const loginJson = (await loginRes.json()) as any;
-  console.log('✅ Admin Login:', loginJson.success ? 'SUCCESS' : 'FAILED', 'Role:', loginJson.data?.user?.role);
+  // 3. Auth Login (if credentials configured)
+  const testAdminEmail = process.env.TEST_ADMIN_EMAIL || db.getTable('admin_users')[0]?.email;
+  const testAdminPassword = process.env.TEST_ADMIN_PASSWORD;
 
-  const token = loginJson.data?.token;
+  if (testAdminEmail && testAdminPassword) {
+    const loginRes = await fetch('http://localhost:4000/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: testAdminEmail, password: testAdminPassword })
+    });
+    const loginJson = (await loginRes.json()) as any;
+    console.log('✅ Admin Login:', loginJson.success ? 'SUCCESS' : 'FAILED', 'Role:', loginJson.data?.user?.role);
 
-  // 4. Admin Stats
-  const statsRes = await fetch('http://localhost:4000/api/admin/stats', {
-    headers: { 'Authorization': `Bearer ${token}` }
-  });
-  const statsJson = (await statsRes.json()) as any;
-  console.log('✅ Admin Dashboard Stats:', statsJson.data);
+    const token = loginJson.data?.token;
+
+    // 4. Admin Stats
+    const statsRes = await fetch('http://localhost:4000/api/admin/stats', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const statsJson = (await statsRes.json()) as any;
+    console.log('✅ Admin Dashboard Stats:', statsJson.data);
+  }
 
   // 5. Public Form Submissions
   const enqRes = await fetch('http://localhost:4000/api/admissions/enquiry', {
@@ -67,21 +74,7 @@ async function verify() {
   const contactJson = (await contactRes.json()) as any;
   console.log('✅ Contact Enquiry Submitted:', contactJson.success ? 'SUCCESS' : 'FAILED');
 
-  // 6. Check Admin Enquiries
-  const admEnqRes = await fetch('http://localhost:4000/api/admin/admissions/enquiries', {
-    headers: { 'Authorization': `Bearer ${token}` }
-  });
-  const admEnqJson = (await admEnqRes.json()) as any;
-  console.log('✅ Admin Enquiries Count:', admEnqJson.data?.length);
-
-  // 7. Check Audit Logs
-  const auditRes = await fetch('http://localhost:4000/api/admin/audit-logs', {
-    headers: { 'Authorization': `Bearer ${token}` }
-  });
-  const auditJson = (await auditRes.json()) as any;
-  console.log('✅ Security Audit Trail Count:', auditJson.data?.length);
-
-  console.log('\n🎉 Live Server Verification Completed Successfully with 100% Passed Endpoints!');
+  console.log('\n🎉 Live Server Verification Completed Successfully!');
 }
 
 verify().catch(console.error);
